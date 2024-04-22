@@ -14,24 +14,24 @@ hours datetime,
 isallyoucaneat boolean,
 Park Varchar(200), 
 typeoffood varcharacter(200),
-foreign key (park) references Parks.Park_Name on update cascade on delete cascade
+foreign key (Park) references Parks(Park_Name) on update cascade on delete cascade
 );
 create table if not exists menuitem(
 menuitem  VARCHAR(200) PRIMARY KEY, 
 restaurant_name Varchar(200), 
-foreign key (restaurant_name) references restaurnats.restaurant_name on update cascade on delete cascade
+foreign key (restaurant_name) references restaurants(restaurant_name) on update cascade on delete cascade
 );
 create table if not exists needs_reservations(
 Restaurant_name  VARCHAR(200) PRIMARY KEY,
 HowHardisItToGet1to10 integer,
-foreign key (restaurant_name) references restaurnats.restaurant_name on update cascade on delete cascade 
+foreign key (restaurant_name) references restaurants(restaurant_name) on update cascade on delete cascade 
 );
 
 create table if not exists quickservice(
 Restaurant_name  VARCHAR(200) PRIMARY KEY,
 has_seating boolean, 
 startingprice integer,
-foreign key (restaurant_name) references restaurnats.restaurant_name on update cascade on delete cascade );
+foreign key (restaurant_name) references restaurants(restaurant_name) on update cascade on delete cascade );
 
 
 
