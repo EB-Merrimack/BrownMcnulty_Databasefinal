@@ -22,6 +22,7 @@ public class IntroToPresentationLayer {
             System.out.println("7- Exit");
 
             System.out.print("Enter your choice: ");
+            
             int choice = scanner.nextInt();
             scanner.nextLine(); // Consume newline
 
@@ -29,7 +30,7 @@ public class IntroToPresentationLayer {
                 case 1:
                     // Add items into the inventory
                     Dal dal1 = new Dal();
-                    System.out.println("Enter the items to add into William's Inventory with each item on a new line (type 'done' when finished):");
+                    System.out.println("Enter the restaurants to add into the database with each item on a new line (type 'done' when finished):");
 
                     List<String> itemsToAdd = new ArrayList<>();
                     while (true) {
@@ -44,50 +45,24 @@ public class IntroToPresentationLayer {
                         // Push all the items to the database
                         Dal.addItemstoInventory(dbName, itemsToAdd, DataMGR.getUsername(), DataMGR.getPassword(), null);
                         ;
-                        System.out.println("Items successfully added to the inventory.");
+                        System.out.println("Restaurants successfully added to the database.");
                     } else {
-                        System.out.println("No items added to the inventory.");
+                        System.out.println("No restaurants were added to the database.");
                     }
                     break;
 
                 case 2:
                     // Search through the inventory
-                   // Search through the inventory
 Dal dal2 = new Dal();
-System.out.println("Enter the search filters for William's Inventory :");
-System.out.print("Danger Level: ");
-String dangerLevelInput = scanner.nextLine();
-Integer dangerLevel = null;
-if (!dangerLevelInput.equalsIgnoreCase("0")) {
-    try {
-        dangerLevel = Integer.parseInt(dangerLevelInput);
-    } catch (NumberFormatException e) {
-        System.out.println("Invalid danger level input. Searching without danger level filter.");
-    }
-}
-
-                    System.out.print("Magic Type: ");
-                    String magicType = scanner.nextLine();
-                    if (magicType.equalsIgnoreCase("skip")) {
-                        magicType = null;
-                    }
-                    System.out.print("Price: ");
-                    String priceInput = scanner.nextLine();
-                    Double price = null;
-                    if (!priceInput.equalsIgnoreCase("skip")) {
-                        try {
-                            price = Double.parseDouble(priceInput);
-                        } catch (NumberFormatException e) {
-                            System.out.println("Invalid price input. Searching without price filter.");
-                        }
-                    }
+System.out.println("Enter the park you want to search :");
+String parksearch = scanner.nextLine();
 
                     // Perform the search with the provided filters
-                    List<String> searchResult = dal2.searchInventory(dbName, dangerLevel, magicType, price, DataMGR.getUsername(), DataMGR.getPassword());
+                    List<String> searchResult = dal2.searchInventory(dbName, parksearch, DataMGR.getUsername(), DataMGR.getPassword());
 
                     // Display search result
                     if (searchResult.isEmpty()) {
-                        System.out.println("No items found matching the search criteria.");
+                        System.out.println("No restaurants found matching the search criteria.");
                     } else {
                         System.out.println("Search Result:");
                         for (String item : searchResult) {
@@ -98,18 +73,27 @@ if (!dangerLevelInput.equalsIgnoreCase("0")) {
 
                 case 3:
                     // Print sales report for a specific month
-                    System.out.print("Enter the month for which you would like to print out a sales report (1-12): ");
-                    int month = scanner.nextInt();
+                    System.out.print("Enter the service type: ");
+                    String searchservicetype = scanner.nextLine();
                     Dal dal3 = new Dal();
-                    dal3.salesReport(dbName, DataMGR.getUsername(), DataMGR.getPassword(), month);
+                    dal3.Servicesearch(dbName, DataMGR.getUsername(), DataMGR.getPassword(), searchservicetype);
                     break;
 
                 case 4:
+                    // Export favorites
+
+                    break;
+
+                case 5:
+                    // Change favorites
+                    
+
+                case 6:
                     // Close connections
                     closeConnections();
                     break;
 
-                case 5:
+                case 7:
                     running = false;
                     System.out.println("Exiting...");
                     break;

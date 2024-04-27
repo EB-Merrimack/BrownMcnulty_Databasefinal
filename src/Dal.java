@@ -229,19 +229,14 @@ public class Dal {
         }
     }
     
-    public List<String> searchInventory(String dbName, Integer dangerLevel, String magicType, Double price, String username, String password) {
+    public List<String> searchInventory(String dbName, String magicType, String username, String password) {
         List<String> searchResult = new ArrayList<>();
     
         try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost/" + dbName, username, password);
              PreparedStatement statement = connection.prepareStatement("SELECT * FROM shop_items WHERE (? IS NULL OR DangerLevel = ?) AND (? IS NULL OR magic = ?) AND (? IS NULL OR SalePrice = ?)")) {
     
             // Set parameters
-            statement.setObject(1, dangerLevel, Types.INTEGER);
-            statement.setObject(2, dangerLevel, Types.INTEGER);
-            statement.setString(3, magicType);
-            statement.setString(4, magicType);
-            statement.setObject(5, price, Types.DOUBLE);
-            statement.setObject(6, price, Types.DOUBLE);
+
     
             // Execute query
             ResultSet resultSet = statement.executeQuery();
@@ -269,9 +264,12 @@ public class Dal {
                 // Prompt user for file path to save search results
                 System.out.println("Enter the file path to save the search results:");
                 String filePath = scanner.nextLine();
+
+                //restaurant to be initialized to show on click
     
+                Object restaurantname = null;
                 // Save search results to specified file path
-                saveSearch(dangerLevel, magicType, price, searchResult, filePath);
+                saveFavorites(dbName, username, password, restaurantname);
             }
     
         } catch (SQLException e) {
@@ -279,6 +277,11 @@ public class Dal {
         }
     
         return searchResult;
+    }
+
+    private void saveFavorites(String dbName, String username, String password, Object restaurantname) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'saveFavorites'");
     }
 
     public void salesReport(String dbName, String username, String password, int month) {
@@ -333,5 +336,10 @@ public class Dal {
             }
         }
     }
+
+	public void Servicesearch(String dbName, String username, String password, String searchservicetype) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'Servicesearch'");
+	}
       }
 
