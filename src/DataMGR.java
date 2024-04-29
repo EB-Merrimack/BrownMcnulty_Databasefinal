@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class DataMGR {
     // JDBC URLs for the databases
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/FindYourDisneyRestaurant";
+    static final String DB_URL = "jdbc:mysql://localhost:3306/FindYourDisneyRestaurant";
 
     // Map to cache database connections
     private static final Map<String, Connection> connectionCache = new HashMap<>();

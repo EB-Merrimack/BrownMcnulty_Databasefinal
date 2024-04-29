@@ -1,5 +1,6 @@
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -60,6 +61,10 @@ public class IntroToPresentationLayer {
                     break;
 
                 case 7:
+                searchrestaurantdetails();
+                break;
+
+                case 8:
                     running = false;
                     System.out.println("Exiting...");
                     break;
@@ -71,31 +76,43 @@ public class IntroToPresentationLayer {
         scanner.close();
     }
 
-    private static void addRestaurantToDatabase() {
-        try (Scanner scanner = new Scanner(System.in)) {
-            // Add items into the inventory and allow user to add favorites
-            Dal dal = new Dal();
-            System.out.println("Enter the restaurants to add into the database with each item on a new line (type 'done' when finished):");
+ private static void searchrestaurantdetails() {
+    try (Scanner scanner = new Scanner(System.in)) {
+        Dal dal = new Dal();
+        System.out.println("Enter the restaurant name:");
+        String restaurantString = scanner.nextLine();
+        dal.searchwholeinventory(restaurantString);
+    } 
+    }
 
-            List<String> itemsToAdd = new ArrayList<>();
-            while (true) {
-                String query = scanner.nextLine();
-                if (query.equalsIgnoreCase("done")) {
-                    break;
-                }
-                itemsToAdd.add(query);
-            }
+private static void addRestaurantToDatabase() {
+    try (Scanner scanner = new Scanner(System.in)) {
+        // Add restaurants into the database and allow the user to add favorites
+        Dal dal = new Dal();
+        System.out.println("Enter the restaurants to add into the database with each restaurant name on a new line (type 'done' when finished):");
 
-            if (!itemsToAdd.isEmpty()) {
-                // Push all the items to the database
-                Dal.addItemstoInventory(dbName, itemsToAdd, DataMGR.getUsername(), DataMGR.getPassword(), null);
-                System.out.println("Restaurants successfully added to the database.");
-                addFavorite(itemsToAdd); // Allow user to add favorites
-            } else {
-                System.out.println("No restaurants were added to the database.");
+        List<String> restaurantsToAdd = new ArrayList<>();
+        while (true) {
+            String restaurantName = scanner.nextLine();
+            if (restaurantName.equalsIgnoreCase("done")) {
+                break;
             }
+            restaurantsToAdd.add(restaurantName);
+        }
+
+        if (!restaurantsToAdd.isEmpty()) {
+            // Push all the restaurants to the database
+            for (String restaurant : restaurantsToAdd) {
+                Dal.addItemstoInventory(dbName, Collections.singletonList(restaurant), DataMGR.getUsername(), DataMGR.getPassword(), null);
+            }
+            System.out.println("Restaurants successfully added to the database.");
+            addFavorite(restaurantsToAdd); // Allow user to add favorites
+        } else {
+            System.out.println("No restaurants were added to the database.");
         }
     }
+}
+
 
     private static void searchByPark() {
         Scanner scanner= new Scanner(System.in);
