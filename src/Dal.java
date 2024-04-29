@@ -46,8 +46,10 @@ public class Dal {
                     System.out.print("Is Character Dining? (true/false): ");
                     boolean isCharacterDining = scanner.nextBoolean();
                     scanner.nextLine(); // Consume newline
-                    System.out.print("Hours (yyyy-MM-dd HH:mm:ss): ");
-                    String hours = scanner.nextLine();
+                    System.out.print("opening hours (HH:mm:ss): ");
+                    String openhours = scanner.nextLine();
+                    System.out.print("clossing hours (HH:mm:ss): ");
+                    String closehours = scanner.nextLine();
                     System.out.print("Is All You Can Eat? (true/false): ");
                     boolean isAllYouCanEat = scanner.nextBoolean();
                     scanner.nextLine(); // Consume newline
@@ -56,7 +58,7 @@ public class Dal {
                     System.out.print("Type of Food: ");
                     String typeOfFood = scanner.nextLine();
                     // Call InsertNewRestaurantsfull with additional details
-                    insertNewRestaurantFull(connection, item, description, isCharacterDining, hours, isAllYouCanEat, park, typeOfFood);
+                    insertNewRestaurantFull(connection, item, description, isCharacterDining, openhours,closehours, isAllYouCanEat, park, typeOfFood);
                 } else {
                     System.out.println("Restaurant " + item + " inserted successfully.");
                 }
@@ -66,15 +68,16 @@ public class Dal {
         }
     }
 
-    private static void insertNewRestaurantFull(Connection connection, String restaurantName, String description, boolean isCharacterDining, String hours, boolean isAllYouCanEat, String park, String typeOfFood) throws SQLException {
-        CallableStatement statement = connection.prepareCall("{CALL InsertNewRestaurantsfull(?, ?, ?, ?, ?, ?, ?)}");
+    private static void insertNewRestaurantFull(Connection connection, String restaurantName, String description, boolean isCharacterDining, String openhours, String closehours, boolean isAllYouCanEat, String park, String typeOfFood) throws SQLException {
+        CallableStatement statement = connection.prepareCall("{CALL InsertNewRestaurantsfull(?, ?, ?,?, ?, ?, ?, ?)}");
         statement.setString(1, restaurantName);
         statement.setString(2, description);
         statement.setBoolean(3, isCharacterDining);
-        statement.setString(4, hours);
-        statement.setBoolean(5, isAllYouCanEat);
-        statement.setString(6, park);
-        statement.setString(7, typeOfFood);
+        statement.setString(4, openhours);
+        statement.setString(5, closehours);
+        statement.setBoolean(6, isAllYouCanEat);
+        statement.setString(7, park);
+        statement.setString(8, typeOfFood);
         statement.execute();
         System.out.println("Restaurant " + restaurantName + " inserted successfully with additional details.");
     }
