@@ -115,44 +115,45 @@ private static void addRestaurantToDatabase() {
 
 
     private static void searchByPark() {
-        Scanner scanner= new Scanner(System.in);
-        // Search through the inventory by park and add to favorites
-        Dal dal = new Dal();
-        System.out.println("Enter the park you want to search :");
-        String parksearch = scanner.nextLine();
+        try (Scanner scanner = new Scanner(System.in)) {
+            // Search through the inventory by park and add to favorites
+            Dal dal = new Dal();
+            System.out.println("Enter the park you want to search :");
+            String parksearch = scanner.nextLine();
 
-        // Perform the search with the provided filters
-        List<String> searchResult = dal.searchInventory(dbName, parksearch, DataMGR.getUsername(), DataMGR.getPassword());
+            // Perform the search with the provided filters
+            List<String> searchResult = dal.searchInventory(dbName, parksearch, DataMGR.getUsername(), DataMGR.getPassword());
 
-        // Display search result
-        if (searchResult.isEmpty()) {
-            System.out.println("No restaurants found matching the search criteria.");
-        } else {
-            System.out.println("Search Result:");
-            for (String item : searchResult) {
-                System.out.println(item); // Assuming Item class has overridden toString() method
+            // Display search result
+            if (searchResult.isEmpty()) {
+                System.out.println("No restaurants found matching the search criteria.");
+            } else {
+                System.out.println("Search Result:");
+                for (String item : searchResult) {
+                    System.out.println(item); // Assuming Item class has overridden toString() method
+                }
+                addFavorite(searchResult); // Allow user to add favorites
             }
-            addFavorite(searchResult); // Allow user to add favorites
         }
     }
 
     private static void searchByServiceType() {
-        Scanner scanner= new Scanner(System.in);
+        try (Scanner scanner = new Scanner(System.in)) {
+            // Search through the inventory by service type and add to favorites
+            System.out.print("Enter the service type: ");
+            String searchServiceType = scanner.nextLine();
+            Dal dal = new Dal();
+            List<String> searchResult = dal.Servicesearch(dbName, DataMGR.getUsername(), DataMGR.getPassword(), searchServiceType);
 
-        // Search through the inventory by service type and add to favorites
-        System.out.print("Enter the service type: ");
-        String searchServiceType = scanner.nextLine();
-        Dal dal = new Dal();
-        List<String> searchResult = dal.Servicesearch(dbName, DataMGR.getUsername(), DataMGR.getPassword(), searchServiceType);
-
-        if (searchResult.isEmpty()) {
-            System.out.println("No restaurants found matching the service type.");
-        } else {
-            System.out.println("Search Result:");
-            for (String item : searchResult) {
-                System.out.println(item); // Assuming Item class has overridden toString() method
+            if (searchResult.isEmpty()) {
+                System.out.println("No restaurants found matching the service type.");
+            } else {
+                System.out.println("Search Result:");
+                for (String item : searchResult) {
+                    System.out.println(item); // Assuming Item class has overridden toString() method
+                }
+                addFavorite(searchResult); // Allow user to add favorites
             }
-            addFavorite(searchResult); // Allow user to add favorites
         }
     }
 
@@ -202,23 +203,27 @@ private static void addRestaurantToDatabase() {
 
     // Method to add restaurants to favorites list
     private static void addFavorite(List<String> items) {
-         Scanner scanner= new Scanner(System.in);
-        System.out.print("Do you want to add any of these restaurants to your favorites? (yes/no): ");
-        String response = scanner.nextLine();
-        if (response.equalsIgnoreCase("yes")) {
-            System.out.println("Enter the numbers of restaurants you want to add (comma-separated): ");
-            String numbers = scanner.nextLine();
-            String[] nums = numbers.split(",");
-            for (String num : nums) {
-                int index = Integer.parseInt(num.trim()) - 1;
-                if (index >= 0 && index < items.size()) {
-                    String restaurant = items.get(index);
-                    favoritesList.add(restaurant);
-                    System.out.println(restaurant + " added to favorites.");
-                } else {
-                    System.out.println("Invalid restaurant number.");
+         try (Scanner scanner = new Scanner(System.in)) {
+            System.out.print("Do you want to add any of these restaurants to your favorites? (yes/no): ");
+            String response = scanner.nextLine();
+            if (response.equalsIgnoreCase("yes")) {
+                System.out.println("Enter the numbers of restaurants you want to add (comma-separated): ");
+                String numbers = scanner.nextLine();
+                String[] nums = numbers.split(",");
+                for (String num : nums) {
+                    int index = Integer.parseInt(num.trim()) - 1;
+                    if (index >= 0 && index < items.size()) {
+                        String restaurant = items.get(index);
+                        favoritesList.add(restaurant);
+                        System.out.println(restaurant + " added to favorites.");
+                    } else {
+                        System.out.println("Invalid restaurant number.");
+                    }
                 }
             }
+        } catch (NumberFormatException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 
