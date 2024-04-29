@@ -13,8 +13,8 @@ public class DataMGR {
     private static final Map<String, Connection> connectionCache = new HashMap<>();
     
     // Cached username and password
-    private static String username;
-    private static String password;
+    static String username;
+    static String password;
 
     // Method to establish a connection to the specified Database with the given username and password
     private static Connection connectToDatabase(String dbUrl, String username, String password) throws SQLException {

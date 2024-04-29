@@ -81,7 +81,7 @@ public class IntroToPresentationLayer {
         Dal dal = new Dal();
         System.out.println("Enter the restaurant name:");
         String restaurantString = scanner.nextLine();
-        dal.searchwholeinventory(restaurantString);
+        dal.searchWholeInventory(dbName,restaurantString);
     } 
     }
 
