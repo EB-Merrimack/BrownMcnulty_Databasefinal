@@ -108,18 +108,23 @@ public class Dal {
                 // Execute the query
                 try (ResultSet resultSet = statement.executeQuery()) {
                     // Process the result set
-                    while (resultSet.next()) {
-                        // Retrieve restaurant details from the result set
-                        String name = resultSet.getString("restaurant_name");
-                        String description = resultSet.getString("description");
-                        boolean isCharacterDining = resultSet.getBoolean("is_character_dining");
-                        // Retrieve other restaurant details as needed
-                        
-                        // Display or process the retrieved restaurant details
-                        System.out.println("Restaurant Name: " + name);
-                        System.out.println("Description: " + description);
-                        System.out.println("Character Dining: " + isCharacterDining);
-                        // Display or process other restaurant details as needed
+                    if (!resultSet.isBeforeFirst()) {
+                        // No restaurants found with the provided name
+                        System.out.println("No restaurant exists with the name: " + restaurantString);
+                    } else {
+                        while (resultSet.next()) {
+                            // Retrieve restaurant details from the result set
+                            String name = resultSet.getString("restaurant_name");
+                            String description = resultSet.getString("description");
+                            boolean isCharacterDining = resultSet.getBoolean("is_character_dining");
+                            // Retrieve other restaurant details as needed
+                            
+                            // Display or process the retrieved restaurant details
+                            System.out.println("Restaurant Name: " + name);
+                            System.out.println("Description: " + description);
+                            System.out.println("Character Dining: " + isCharacterDining);
+                            // Display or process other restaurant details as needed
+                        }
                     }
                 }
             }
@@ -127,7 +132,8 @@ public class Dal {
             e.printStackTrace();
         }
     }
+}    
     
-}
+
 
 
