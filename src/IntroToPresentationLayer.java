@@ -22,7 +22,8 @@ public class IntroToPresentationLayer {
             System.out.println("4- Export favorites");
             System.out.println("5- Change favorites");
             System.out.println("6- Close database connections");
-            System.out.println("7- Exit");
+            System.out.println("7- Search restaurant details");
+            System.out.println("8- Exit");
 
             System.out.print("Enter your choice: ");
             
