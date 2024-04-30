@@ -9,12 +9,13 @@ public class IntroToPresentationLayer {
     private static List<String> favoritesList = new ArrayList<>();
    
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        boolean running = true;
-        DataMGR.main(args);
+public static void main(String[] args) {
+    Scanner scanner = new Scanner(System.in);
+    boolean running = true;
+    DataMGR.main(args);
 
-        while (running) {
+    while (running) {
+        try {
             System.out.println("Welcome to Disney restaurant database. Your options are as follows:");
             System.out.println("1- Add restaurant to database");
             System.out.println("2- Search by park");
@@ -34,7 +35,6 @@ public class IntroToPresentationLayer {
                 case 1:
                     // Add items into the inventory
                     addRestaurantToDatabase();
-
                     break;
 
                 case 2:
@@ -63,8 +63,8 @@ public class IntroToPresentationLayer {
                     break;
 
                 case 7:
-                searchRestaurantDetails();
-                break;
+                    searchRestaurantDetails();
+                    break;
 
                 case 8:
                     running = false;
@@ -74,9 +74,13 @@ public class IntroToPresentationLayer {
                 default:
                     System.out.println("Invalid choice. Please enter a number between 1 and 7.");
             }
+        } catch (Exception e) {
+            System.out.println("An error occurred: " + e.getMessage());
+            e.printStackTrace();
         }
-        scanner.close();
     }
+
+}
 
     private static void searchRestaurantDetails() {
         try (Scanner scanner2 = new Scanner(System.in)) {
