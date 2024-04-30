@@ -75,7 +75,7 @@ public class Dal {
                     System.out.print("Price Range ($): ");
                     String priceRange = scanner.nextLine();
                     // Call InsertNewRestaurantsfull with additional details
-                    insertNewRestaurantFull(connection, item, restaurantDescription, isCharacterDining, openingHours,closingHours, isAllYouCanEat, park, typeOfFood);
+                    insertNewRestaurantFull(connection, item, restaurantDescription, isCharacterDining, openingHours,closingHours, isAllYouCanEat, park, typeOfFood, priceRange);
                 } else {
                     System.out.println("Restaurant " + item + " inserted successfully.");
                 }
@@ -85,7 +85,7 @@ public class Dal {
         }
     }
 
-    private static void insertNewRestaurantFull(Connection connection, String restaurantName, String description, boolean isCharacterDining, String openhours, String closehours, boolean isAllYouCanEat, String park, String typeOfFood) throws SQLException {
+    private static void insertNewRestaurantFull(Connection connection, String restaurantName, String description, boolean isCharacterDining, String openhours, String closehours, boolean isAllYouCanEat, String park, String typeOfFood, String priceRange) throws SQLException {
         CallableStatement statement = connection.prepareCall("{CALL InsertNewRestaurantsfull(?, ?, ?,?, ?, ?, ?, ?)}");
         statement.setString(1, restaurantName);
         statement.setString(2, description);
@@ -155,6 +155,10 @@ public class Dal {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+
+        
+
         
         // Pause before going back to the menu
         System.out.println("Press Enter to continue...");
@@ -163,6 +167,25 @@ public class Dal {
         
         return searchResults;
     }
+
+
+    public List<String> searchRestaurantsByPark(String dbName, String username, String password, String parkName) {
+        List<String> restaurants = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(DataMGR.DB_URL + dbName, username, password)) {
+            String query = "SELECT restaurantName FROM Restaurants WHERE park = ?";
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, parkName);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                String restaurantName = resultSet.getString("restaurantName");
+                restaurants.add(restaurantName);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return restaurants;
+    }
+
 }    
     
 
