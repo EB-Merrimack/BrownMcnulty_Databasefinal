@@ -57,14 +57,14 @@ public class Dal {
                     // Prompt the user for additional details
                     System.out.println("Additional details required for the restaurant " + item + ". Please provide:");
                     System.out.print("Description: ");
-                    String description = scanner.nextLine();
+                    String restaurantDescription = scanner.nextLine();
                     System.out.print("Is Character Dining? (true/false): ");
                     boolean isCharacterDining = scanner.nextBoolean();
                     scanner.nextLine(); // Consume newline
                     System.out.print("opening hours (HH:mm:ss): ");
-                    String openhours = scanner.nextLine();
+                    String openingHours = scanner.nextLine();
                     System.out.print("clossing hours (HH:mm:ss): ");
-                    String closehours = scanner.nextLine();
+                    String closingHours = scanner.nextLine();
                     System.out.print("Is All You Can Eat? (true/false): ");
                     boolean isAllYouCanEat = scanner.nextBoolean();
                     scanner.nextLine(); // Consume newline
@@ -72,8 +72,10 @@ public class Dal {
                     String park = scanner.nextLine();
                     System.out.print("Type of Food: ");
                     String typeOfFood = scanner.nextLine();
+                    System.out.print("Price Range ($): ");
+                    String priceRange = scanner.nextLine();
                     // Call InsertNewRestaurantsfull with additional details
-                    insertNewRestaurantFull(connection, item, description, isCharacterDining, openhours,closehours, isAllYouCanEat, park, typeOfFood);
+                    insertNewRestaurantFull(connection, item, restaurantDescription, isCharacterDining, openingHours,closingHours, isAllYouCanEat, park, typeOfFood);
                 } else {
                     System.out.println("Restaurant " + item + " inserted successfully.");
                 }
