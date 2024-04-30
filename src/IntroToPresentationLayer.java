@@ -34,6 +34,7 @@ public class IntroToPresentationLayer {
                 case 1:
                     // Add items into the inventory
                     addRestaurantToDatabase();
+
                     break;
 
                 case 2:
@@ -78,13 +79,18 @@ public class IntroToPresentationLayer {
     }
 
     private static void searchRestaurantDetails() {
-        try (Scanner scanner = new Scanner(System.in)) {
+        try (Scanner scanner2 = new Scanner(System.in)) {
             Dal dal = new Dal();
             System.out.println("Enter the restaurant name:");
-            String restaurantString = scanner.nextLine();
-            dal.searchWholeInventory(dbName, restaurantString);
-        } 
+            String restaurantString = scanner2.nextLine();
+            dal.searchWholeInventory( restaurantString); // Use the correct database name
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+    
+    
     
 
 private static void addRestaurantToDatabase() {

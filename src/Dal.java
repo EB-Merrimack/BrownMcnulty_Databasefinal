@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.sql.Types;
 import java.text.NumberFormat;
@@ -96,8 +97,10 @@ public class Dal {
         System.out.println("Restaurant " + restaurantName + " inserted successfully with additional details.");
     }
 
-    public void searchWholeInventory(String restaurantString, String dbName) {
-        try (Connection connection = DriverManager.getConnection(DataMGR.DB_URL + dbName, DataMGR.username, DataMGR.password)) {
+    public List<String> searchWholeInventory(String restaurantString) {
+    
+        List<String> searchResults = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(DataMGR.DB_URL, DataMGR.username, DataMGR.password)) {
             // Define the SQL query to search for the restaurant
             String sql = "SELECT * FROM restaurants WHERE restaurant_name LIKE ?";
             
@@ -110,20 +113,39 @@ public class Dal {
                     // Process the result set
                     if (!resultSet.isBeforeFirst()) {
                         // No restaurants found with the provided name
-                        System.out.println("No restaurant exists with the name: " + restaurantString);
+                        searchResults.add("No restaurant exists with the name: " + restaurantString);
                     } else {
                         while (resultSet.next()) {
                             // Retrieve restaurant details from the result set
                             String name = resultSet.getString("restaurant_name");
                             String description = resultSet.getString("description");
-                            boolean isCharacterDining = resultSet.getBoolean("is_character_dining");
+                            boolean isCharacterDining = resultSet.getBoolean("ischaracterdining");
                             // Retrieve other restaurant details as needed
+                            Time openingHours = resultSet.getTime("opening_hours");
+                            Time closingHours = resultSet.getTime("closing_hours");
+                            String priceRange = resultSet.getString("pricerange");
+                            boolean isAllYouCanEat = resultSet.getBoolean("isallyoucaneat");
+                            String park = resultSet.getString("Park");
+                            String typeOfFood = resultSet.getString("typeoffood");
                             
-                            // Display or process the retrieved restaurant details
-                            System.out.println("Restaurant Name: " + name);
-                            System.out.println("Description: " + description);
-                            System.out.println("Character Dining: " + isCharacterDining);
-                            // Display or process other restaurant details as needed
+                            // Build a string representation of the restaurant details
+                            StringBuilder result = new StringBuilder();
+                            result.append("Restaurant Name: ").append(name).append("\n");
+                            result.append("Description: ").append(description).append("\n");
+                            result.append("Character Dining: ").append(isCharacterDining).append("\n");
+                            // Append other restaurant details
+                            result.append("Opening Hours: ").append(openingHours).append("\n");
+                            result.append("Closing Hours: ").append(closingHours).append("\n");
+                            result.append("Price Range: ").append(priceRange).append("\n");
+                            result.append("All You Can Eat: ").append(isAllYouCanEat).append("\n");
+                            result.append("Park: ").append(park).append("\n");
+                            result.append("Type of Food: ").append(typeOfFood).append("\n");
+                            
+                            // Add the string representation to the search results list
+                            searchResults.add(result.toString());
+                            
+                            // Print out the restaurant details as they are retrieved
+                            System.out.println(result);
                         }
                     }
                 }
@@ -131,6 +153,13 @@ public class Dal {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        
+        // Pause before going back to the menu
+        System.out.println("Press Enter to continue...");
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine(); // Wait for user to press Enter
+        
+        return searchResults;
     }
 }    
     
