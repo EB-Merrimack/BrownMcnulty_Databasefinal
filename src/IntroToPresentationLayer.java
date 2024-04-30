@@ -62,7 +62,7 @@ public class IntroToPresentationLayer {
                     break;
 
                 case 7:
-                searchrestaurantdetails();
+                searchRestaurantDetails();
                 break;
 
                 case 8:
@@ -77,14 +77,15 @@ public class IntroToPresentationLayer {
         scanner.close();
     }
 
- private static void searchrestaurantdetails() {
-    try (Scanner scanner = new Scanner(System.in)) {
-        Dal dal = new Dal();
-        System.out.println("Enter the restaurant name:");
-        String restaurantString = scanner.nextLine();
-        dal.searchWholeInventory(dbName,restaurantString);
-    } 
+    private static void searchRestaurantDetails() {
+        try (Scanner scanner = new Scanner(System.in)) {
+            Dal dal = new Dal();
+            System.out.println("Enter the restaurant name:");
+            String restaurantString = scanner.nextLine();
+            dal.searchWholeInventory(dbName, restaurantString);
+        } 
     }
+    
 
 private static void addRestaurantToDatabase() {
     try (Scanner scanner = new Scanner(System.in)) {

@@ -4,7 +4,7 @@ USE FindYourDisneyRestaurant;
 
 CREATE TABLE IF NOT EXISTS Parks (
     Park_Name VARCHAR(200) PRIMARY KEY,
-    description VARCHAR(200)
+    description VARCHAR(500)
 );
 create table if not exists restaurants(
 restaurant_name  VARCHAR(200) PRIMARY KEY,
@@ -12,6 +12,7 @@ description varchar(200),
 ischaracterdining boolean,
 opening_hours time,
 Closing_hours time,
+pricerange varchar(5),
 isallyoucaneat boolean,
 Park Varchar(200), 
 typeoffood varcharacter(200),
