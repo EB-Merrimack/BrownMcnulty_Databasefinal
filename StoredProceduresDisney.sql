@@ -3,14 +3,14 @@ USE FindYourDisneyRestaurant;
 DELIMITER //
 
 CREATE PROCEDURE InsertNewRestaurants(
-   IN restaurant_name VARCHAR(200),
+   IN restaurantName VARCHAR(200),
    OUT need_additional_details BOOLEAN
 )
 BEGIN 
     DECLARE restaurant_count INT;
     
     -- Check if the restaurant already exists
-    SELECT COUNT(*) INTO restaurant_count FROM restaurants WHERE restaurant_name = restaurant_name;
+    SELECT COUNT(*) INTO restaurant_count FROM restaurants WHERE restaurantName = restaurantName;
     
     -- If restaurant does not exist, set flag to true
     IF restaurant_count = 0 THEN
@@ -22,19 +22,20 @@ BEGIN
 END //
 
 CREATE PROCEDURE InsertNewRestaurantsfull(
-    IN restaurant_name VARCHAR(200),
-    IN description VARCHAR(200), 
-    IN is_character_dining BOOLEAN,
-    opening_hours time,
-Closing_hours time,
+    IN restaurantName VARCHAR(200),
+    IN restaurantDescription VARCHAR(200), 
+    IN isCharacterDining BOOLEAN,
+    IN openingHours time,
+    IN closingHours time,
     IN is_all_you_can_eat BOOLEAN,
     IN park VARCHAR(200), 
-    IN type_of_food VARCHAR(200)
+    IN typeOfFood VARCHAR(200)
+    IN priceRange(5)
 )
 BEGIN
     -- Inserting data into the restaurants table
-    INSERT INTO restaurants (restaurant_name, description, is_character_dining, hours, is_all_you_can_eat, park, type_of_food)
-    VALUES (restaurant_name, description, is_character_dining, hours, is_all_you_can_eat, park, type_of_food);
+    INSERT INTO restaurants (restaurantName, restaurantDescription, isCharacterDining, openingHours, closingHours, isAllYouCanEat, park, typeOfFood, priceRange)
+    VALUES (restaurantName, restaurantDescription, isCharacterDining, openingHours, closingHours, isAllYouCanEat, park, typeOfFood, priceRange);
 END //
 
 DELIMITER ;
