@@ -27,7 +27,7 @@ CREATE PROCEDURE InsertNewRestaurantsfull(
     IN isCharacterDining BOOLEAN,
     IN openingHours time,
     IN closingHours time,
-    IN is_all_you_can_eat BOOLEAN,
+    IN isAllYouCanEat BOOLEAN,
     IN park VARCHAR(200), 
     IN typeOfFood VARCHAR(200)
     IN priceRange(5)
