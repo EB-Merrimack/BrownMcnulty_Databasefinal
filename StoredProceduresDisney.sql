@@ -1,8 +1,8 @@
 USE FindYourDisneyRestaurant;
 
 DELIMITER //
-
-CREATE PROCEDURE InsertNewRestaurants(
+drop procedure if exists InsertNewRestaurants;
+CREATE PROCEDURE  InsertNewRestaurants(
    IN restaurantName VARCHAR(200),
    OUT need_additional_details BOOLEAN
 )
@@ -29,8 +29,8 @@ CREATE PROCEDURE InsertNewRestaurantsfull(
     IN closingHours time,
     IN isAllYouCanEat BOOLEAN,
     IN park VARCHAR(200), 
-    IN typeOfFood VARCHAR(200)
-    IN priceRange(5)
+    IN typeOfFood VARCHAR(200),
+    IN priceRange varchar(5)
 )
 BEGIN
     -- Inserting data into the restaurants table
