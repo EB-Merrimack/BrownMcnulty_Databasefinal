@@ -11,8 +11,15 @@ public class IntroToPresentationLayer {
 
 public static void main(String[] args) {
     Scanner scanner = new Scanner(System.in);
-    boolean running = true;
-    DataMGR.main(args);
+    DataMGR.connection(args);
+    choices();
+}
+
+
+
+    public static void choices() {
+        boolean running = true;
+        Scanner scanner = new Scanner(System.in);
 
     while (running) {
         try {
@@ -118,7 +125,7 @@ private static void addRestaurantToDatabase() {
                 Dal.addItemstoInventory(dbName, Collections.singletonList(restaurant), DataMGR.getUsername(), DataMGR.getPassword(), null);
             }
             System.out.println("Restaurants successfully added to the database.");
-            addFavorite(restaurantsToAdd); // Allow user to add favorites
+            DataMGR.addFavorite(restaurantsToAdd); // Allow user to add favorites
         } else {
             System.out.println("No restaurants were added to the database.");
         }
@@ -144,7 +151,7 @@ private static void addRestaurantToDatabase() {
                 for (String item : searchResult) {
                     System.out.println(item); // Assuming Item class has overridden toString() method
                 }
-                addFavorite(searchResult); // Allow user to add favorites
+                DataMGR.addFavorite(searchResult); // Allow user to add favorites
             }
         }
     }
@@ -164,7 +171,7 @@ private static void addRestaurantToDatabase() {
                 for (String item : searchResult) {
                     System.out.println(item); // Assuming Item class has overridden toString() method
                 }
-                addFavorite(searchResult); // Allow user to add favorites
+                ((DataMGR) favoritesList).addFavorite(searchResult); // Allow user to add favorites
             }
         }
     }
@@ -213,31 +220,7 @@ private static void addRestaurantToDatabase() {
     }
     
 
-    // Method to add restaurants to favorites list
-    private static void addFavorite(List<String> items) {
-         try (Scanner scanner = new Scanner(System.in)) {
-            System.out.print("Do you want to add any of these restaurants to your favorites? (yes/no): ");
-            String response = scanner.nextLine();
-            if (response.equalsIgnoreCase("yes")) {
-                System.out.println("Enter the numbers of restaurants you want to add (comma-separated): ");
-                String numbers = scanner.nextLine();
-                String[] nums = numbers.split(",");
-                for (String num : nums) {
-                    int index = Integer.parseInt(num.trim()) - 1;
-                    if (index >= 0 && index < items.size()) {
-                        String restaurant = items.get(index);
-                        favoritesList.add(restaurant);
-                        System.out.println(restaurant + " added to favorites.");
-                    } else {
-                        System.out.println("Invalid restaurant number.");
-                    }
-                }
-            }
-        } catch (NumberFormatException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
+  
 
     // Method to close all cached connections
     private static void closeConnections() {

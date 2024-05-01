@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
+@SuppressWarnings("unused")
 public class Dal {
     public Dal() {
     }
@@ -27,6 +28,7 @@ public class Dal {
             statement.setString(1, parksearch);
             statement.registerOutParameter(2, Types.REF_CURSOR);
             statement.execute();
+            @SuppressWarnings("resource")
             ResultSet resultSet = (ResultSet) statement.getObject(2);
             List<String> results = new ArrayList<>();
             while (resultSet.next()) {
@@ -99,7 +101,8 @@ public class Dal {
         System.out.println("Restaurant " + restaurantName + " inserted successfully with additional details.");
     }
 
-    public List<String> searchWholeInventory(String restaurantString) {
+    @SuppressWarnings("resource")
+    public void searchWholeInventory(String restaurantString) {
     
         List<String> searchResults = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(DataMGR.DB_URL, DataMGR.username, DataMGR.password)) {
@@ -163,9 +166,9 @@ public class Dal {
         // Pause before going back to the menu
         System.out.println("Press Enter to continue...");
         Scanner scanner = new Scanner(System.in);
-        scanner.nextLine(); // Wait for user to press Enter
+        scanner.nextLine(); 
+        IntroToPresentationLayer.choices();
         
-        return searchResults;
     }
 
 
