@@ -2,6 +2,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -63,6 +64,7 @@ public class DataMGR {
 
     // Example usage
     public static void connection(String[] args) {
+        @SuppressWarnings("resource")
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter username:");
         String user = scanner.nextLine();
@@ -74,10 +76,35 @@ public class DataMGR {
 
         try {
             // Example usage to connect to the MealPlanning Database
+            @SuppressWarnings("unused")
             Connection dbConnection = getCachedConnection(DB_URL, user, pass);
             System.out.println("Connected to Disney Restaurant Database successfully.");
 
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+      // Method to add restaurants to favorites list
+    static void addFavorite(List<String> items) {
+         try (Scanner scanner = new Scanner(System.in)) {
+            System.out.print("Do you want to add any of these restaurants to your favorites? (yes/no): ");
+            String response = scanner.nextLine();
+            if (response.equalsIgnoreCase("yes")) {
+                System.out.println("Enter the numbers of restaurants you want to add (comma-separated): ");
+                String numbers = scanner.nextLine();
+                String[] nums = numbers.split(",");
+                for (String num : nums) {
+                    int index = Integer.parseInt(num.trim()) - 1;
+                    if (index >= 0 && index < items.size()) {
+                        String restaurant = items.get(index);
+                        favoritesList.add(restaurant);
+                        System.out.println(restaurant + " added to favorites.");
+                    } else {
+                        System.out.println("Invalid restaurant number.");
+                    }
+                }
+            }
+        } catch (NumberFormatException e) {
             e.printStackTrace();
         }
     }
