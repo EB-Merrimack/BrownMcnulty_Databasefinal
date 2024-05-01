@@ -172,8 +172,7 @@ public class Dal {
     public List<String> searchRestaurantsByPark(String dbName, String username, String password, String parkName) {
         List<String> restaurants = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(DataMGR.DB_URL + dbName, username, password)) {
-            String query = "SELECT restaurantName FROM Restaurants WHERE park = ?";
-            PreparedStatement statement = connection.prepareStatement(query);
+            CallableStatement statement = connection.prepareCall("{CALL FindRestaurantsByParkName(?)}");
             statement.setString(1, parkName);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -186,6 +185,24 @@ public class Dal {
         return restaurants;
     }
 
+    public List<String> findRestaurantsByServiceType(String dbName, String username, String password, String serviceType) {
+        List<String> restaurants = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(DataMGR.DB_URL + dbName, username, password)) {
+            String procedureCall = "{CALL FindRestaurantsByServiceType(?)}";
+            try (CallableStatement statement = connection.prepareCall(procedureCall)) {
+                statement.setString(1, serviceType);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    while (resultSet.next()) {
+                        String restaurantName = resultSet.getString("restaurantName");
+                        restaurants.add(restaurantName);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return restaurants;
+    }
 }    
     
 
