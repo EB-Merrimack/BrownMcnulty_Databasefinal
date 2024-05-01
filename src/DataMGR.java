@@ -62,7 +62,7 @@ public class DataMGR {
     }
 
     // Example usage
-    public static void main(String[] args) {
+    public static void connection(String[] args) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter username:");
         String user = scanner.nextLine();

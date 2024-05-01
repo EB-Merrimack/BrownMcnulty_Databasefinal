@@ -12,7 +12,7 @@ public class IntroToPresentationLayer {
 public static void main(String[] args) {
     Scanner scanner = new Scanner(System.in);
     boolean running = true;
-    DataMGR.main(args);
+    DataMGR.connection(args);
 
     while (running) {
         try {

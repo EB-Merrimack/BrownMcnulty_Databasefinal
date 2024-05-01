@@ -99,7 +99,7 @@ public class Dal {
         System.out.println("Restaurant " + restaurantName + " inserted successfully with additional details.");
     }
 
-    public List<String> searchWholeInventory(String restaurantString) {
+    public void searchWholeInventory(String restaurantString) {
     
         List<String> searchResults = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(DataMGR.DB_URL, DataMGR.username, DataMGR.password)) {
@@ -163,9 +163,8 @@ public class Dal {
         // Pause before going back to the menu
         System.out.println("Press Enter to continue...");
         Scanner scanner = new Scanner(System.in);
-        scanner.nextLine(); // Wait for user to press Enter
+        scanner.nextLine(); 
         
-        return searchResults;
     }
 
 
