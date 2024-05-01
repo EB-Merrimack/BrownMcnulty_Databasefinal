@@ -107,7 +107,7 @@ public class Dal {
         List<String> searchResults = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(DataMGR.DB_URL, DataMGR.username, DataMGR.password)) {
             // Define the SQL query to search for the restaurant
-            String sql = "SELECT * FROM restaurants WHERE restaurant_name LIKE ?";
+            String sql = "SELECT * FROM restaurants WHERE restaurantName LIKE ?";
             
             try (PreparedStatement statement = connection.prepareStatement(sql)) {
                 // Set the parameter for the restaurant name using a wildcard '%' to match any part of the name
@@ -122,16 +122,16 @@ public class Dal {
                     } else {
                         while (resultSet.next()) {
                             // Retrieve restaurant details from the result set
-                            String name = resultSet.getString("restaurant_name");
-                            String description = resultSet.getString("description");
-                            boolean isCharacterDining = resultSet.getBoolean("ischaracterdining");
+                            String name = resultSet.getString("restaurantName");
+                            String description = resultSet.getString("restaurantDescription");
+                            boolean isCharacterDining = resultSet.getBoolean("isCharacterDining");
                             // Retrieve other restaurant details as needed
-                            Time openingHours = resultSet.getTime("opening_hours");
-                            Time closingHours = resultSet.getTime("closing_hours");
+                            Time openingHours = resultSet.getTime("openingHours");
+                            Time closingHours = resultSet.getTime("closingHours");
                             String priceRange = resultSet.getString("pricerange");
-                            boolean isAllYouCanEat = resultSet.getBoolean("isallyoucaneat");
+                            boolean isAllYouCanEat = resultSet.getBoolean("isAllYouCanEat");
                             String park = resultSet.getString("Park");
-                            String typeOfFood = resultSet.getString("typeoffood");
+                            String typeOfFood = resultSet.getString("typeOfFood");
                             
                             // Build a string representation of the restaurant details
                             StringBuilder result = new StringBuilder();
