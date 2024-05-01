@@ -39,3 +39,33 @@ BEGIN
 END //
 
 DELIMITER ;
+
+
+DELIMITER //
+
+CREATE PROCEDURE FindRestaurantsByParkName(IN parkName VARCHAR(200))
+BEGIN
+    SELECT restaurantName 
+    FROM Restaurants 
+    WHERE park = parkName;
+END//
+
+DELIMITER ;
+
+
+DELIMITER //
+
+CREATE PROCEDURE FindRestaurantsByServiceType(IN serviceType VARCHAR(50))
+BEGIN
+    IF serviceType = 'Quick Service' THEN
+        SELECT r.restaurantName 
+        FROM Restaurants r
+        INNER JOIN QuickService qs ON r.restaurantName = qs.restaurantName;
+    ELSE
+        SELECT r.restaurantName 
+        FROM Restaurants r
+        INNER JOIN NeedsReservations nr ON r.restaurantName = nr.restaurantName;
+    END IF;
+END//
+
+DELIMITER ;
