@@ -11,8 +11,15 @@ public class IntroToPresentationLayer {
 
 public static void main(String[] args) {
     Scanner scanner = new Scanner(System.in);
-    boolean running = true;
     DataMGR.connection(args);
+    choices();
+}
+
+
+
+    public static void choices() {
+        boolean running = true;
+        Scanner scanner = new Scanner(System.in);
 
     while (running) {
         try {
