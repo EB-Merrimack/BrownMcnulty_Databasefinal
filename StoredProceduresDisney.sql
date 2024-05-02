@@ -1,8 +1,8 @@
 USE FindYourDisneyRestaurant;
 
 DELIMITER //
-drop procedure if exists InsertNewRestaurants;
-CREATE PROCEDURE  InsertNewRestaurants(
+DROP PROCEDURE IF EXISTS InsertNewRestaurants;
+CREATE PROCEDURE InsertNewRestaurants(
    IN restaurantName VARCHAR(200),
    OUT need_additional_details BOOLEAN
 )
@@ -20,6 +20,7 @@ BEGIN
         SET need_additional_details := FALSE;
     END IF;
 END //
+
 drop procedure if exists InsertNewRestaurantsfull;
 CREATE PROCEDURE InsertNewRestaurantsfull(
     IN restaurantName VARCHAR(200),
