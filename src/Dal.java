@@ -190,7 +190,7 @@ public class Dal {
         System.out.println("Press Enter to continue...");
         Scanner scanner = new Scanner(System.in);
         scanner.nextLine(); 
-        IntroToPresentationLayer.choices();
+        addFavorite(restaurants);
         return restaurants;
     }
 
