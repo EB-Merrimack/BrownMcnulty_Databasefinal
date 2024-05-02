@@ -44,7 +44,7 @@ public class Dal {
 
 
 
- public static void addItemstoInventory(List<String> itemsToAdd, String username, String password, Scanner scanner) {
+ public static void addRestaurantDetails(List<String> itemsToAdd, String username, String password, Scanner scanner) {
     try (Connection connection = DriverManager.getConnection(DataMGR.DB_URL, username, password)) {
         for (String item : itemsToAdd) {
             CallableStatement statement = connection.prepareCall("{CALL InsertNewRestaurants(?, ?)}");
@@ -52,7 +52,7 @@ public class Dal {
             statement.registerOutParameter(2, java.sql.Types.BOOLEAN);
             statement.execute();
             boolean needAdditionalDetails = statement.getBoolean(2);
-            
+        
             // Manually check if needAdditionalDetails is true (1)
             if (needAdditionalDetails) {
                 System.out.println("Additional details required for the restaurant " + item + ". Please provide:");
@@ -101,7 +101,7 @@ public class Dal {
     }
 
     @SuppressWarnings("resource")
-    public void searchWholeInventory(String restaurantString) {
+    public void searchAllRestaurants(String restaurantString) {
     
         List<String> searchResults = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(DataMGR.DB_URL, DataMGR.username, DataMGR.password)) {

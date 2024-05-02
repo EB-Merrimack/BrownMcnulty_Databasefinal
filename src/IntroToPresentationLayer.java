@@ -106,7 +106,7 @@ public static void main(String[] args) {
             Dal dal = new Dal();
             System.out.println("Enter the restaurant name:");
             String restaurantString = scanner2.nextLine();
-            dal.searchWholeInventory( restaurantString); // Use the correct database name
+            dal.searchAllRestaurants( restaurantString); // Use the correct database name
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -134,7 +134,7 @@ private static void addRestaurantToDatabase() {
         if (!restaurantsToAdd.isEmpty()) {
             // Push all the restaurants to the database
             for (String restaurant : restaurantsToAdd) {
-                Dal.addItemstoInventory( Collections.singletonList(restaurant), DataMGR.getUsername(), DataMGR.getPassword(), null);
+                Dal.addRestaurantDetails( Collections.singletonList(restaurant), DataMGR.getUsername(), DataMGR.getPassword(), null);
             }
             System.out.println("Restaurants successfully added to the database.");
             Dal.addFavorite(restaurantsToAdd); // Allow user to add favorites
