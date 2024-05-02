@@ -2,28 +2,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class favoritesList {
-    private static List<String> favorites;
+    private static List<String> favorites = new ArrayList<>();
 
-    public favoritesList() {
-        this.favorites = new ArrayList<>();
+    // Private constructor to prevent instantiation from outside
+    private favoritesList() {
+        // Empty constructor
     }
 
-    public void addFavorite(String favorite) {
+    // Add a favorite restaurant
+    public static void addFavorite(String favorite) {
         favorites.add(favorite);
     }
 
-    public void removeFavorite(String favorite) {
+    // Remove a favorite restaurant
+    public static void removeFavorite(String favorite) {
         favorites.remove(favorite);
     }
 
-    // Other methods for manipulating the favorites list...
-
-    public List<String> getFavorites() {
+    // Get the list of favorite restaurants
+    public static List<String> getFavorites() {
         return favorites;
-    }
-
-    // Implement the add method
-    public static void add(String restaurant) {
-        favorites.add(restaurant);
     }
 }

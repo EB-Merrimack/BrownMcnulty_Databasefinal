@@ -210,8 +210,38 @@ public class Dal {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        System.out.println("Here are the restaurants in " + serviceType + ": " + restaurants);
+        System.out.println("Press Enter to continue...");
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine(); 
+        addFavorite(restaurants);
         return restaurants;
     }
+
+    static void addFavorite(List<String> items) {
+        try (Scanner scanner = new Scanner(System.in)) {
+           System.out.print("Do you want to add any of these restaurants to your favorites? (yes/no): ");
+           String response = scanner.nextLine();
+           if (response.equalsIgnoreCase("yes")) {
+               System.out.println("Enter the names of restaurants you want to add (comma-separated): ");
+               String namesString = scanner.nextLine();
+               String[] names = namesString.split(",");
+               for (String name : names) {
+                   String restaurant = name.trim();
+                   if (items.contains(restaurant)) {
+                       favoritesList.addFavorite(restaurant);
+                       System.out.println(restaurant + " added to favorites.");
+                   } else {
+                       System.out.println("Restaurant '" + restaurant + "' not found.");
+                   }
+               }
+           }
+           IntroToPresentationLayer.choices();
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
+        
+   }
 }    
     
 

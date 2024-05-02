@@ -125,7 +125,7 @@ private static void addRestaurantToDatabase() {
                 Dal.addItemstoInventory(dbName, Collections.singletonList(restaurant), DataMGR.getUsername(), DataMGR.getPassword(), null);
             }
             System.out.println("Restaurants successfully added to the database.");
-            DataMGR.addFavorite(restaurantsToAdd); // Allow user to add favorites
+            Dal.addFavorite(restaurantsToAdd); // Allow user to add favorites
         } else {
             System.out.println("No restaurants were added to the database.");
         }
@@ -151,7 +151,7 @@ private static void addRestaurantToDatabase() {
                 for (String item : searchResult) {
                     System.out.println(item); // Assuming Item class has overridden toString() method
                 }
-                DataMGR.addFavorite(searchResult); // Allow user to add favorites
+                Dal.addFavorite(searchResult); // Allow user to add favorites
             }
         }
     }
@@ -162,7 +162,7 @@ private static void addRestaurantToDatabase() {
             System.out.print("Enter the service type: ");
             String searchServiceType = scanner.nextLine();
             Dal dal = new Dal();
-            List<String> searchResult = dal.Servicesearch(dbName, DataMGR.getUsername(), DataMGR.getPassword(), searchServiceType);
+            List<String> searchResult = dal.findRestaurantsByServiceType(DataMGR.getUsername(), DataMGR.getPassword(), searchServiceType);
 
             if (searchResult.isEmpty()) {
                 System.out.println("No restaurants found matching the service type.");
@@ -171,7 +171,7 @@ private static void addRestaurantToDatabase() {
                 for (String item : searchResult) {
                     System.out.println(item); // Assuming Item class has overridden toString() method
                 }
-                ((DataMGR) favoritesList).addFavorite(searchResult); // Allow user to add favorites
+                ((Dal) favoritesList).addFavorite(searchResult); // Allow user to add favorites
             }
         }
     }
