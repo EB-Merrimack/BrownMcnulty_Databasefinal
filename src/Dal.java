@@ -29,7 +29,7 @@ public class Dal {
             statement.registerOutParameter(2, Types.REF_CURSOR);
             statement.execute();
             @SuppressWarnings("resource")
-            ResultSet resultSet = (ResultSet) statement.getObject(2);
+            ResultSet resultSet = (ResultSet) statement.getObject(1);
             List<String> results = new ArrayList<>();
             while (resultSet.next()) {
                 String result = resultSet.getString(1);
@@ -44,45 +44,47 @@ public class Dal {
 
 
 
-    public static void addItemstoInventory( List<String> itemsToAdd, String username, String password, Scanner scanner) {
-        try (Connection connection = DriverManager.getConnection(DataMGR.DB_URL , username, password)) {
-            for (String item : itemsToAdd) {
-                CallableStatement statement = connection.prepareCall("{CALL InsertNewRestaurants(?, ?)}");
-                statement.setString(1, item);
-                statement.registerOutParameter(2, java.sql.Types.BOOLEAN);
-                statement.execute();
-                boolean needAdditionalDetails = statement.getBoolean(2);
-                if (needAdditionalDetails) {
-                    // Prompt the user for additional details
-                    System.out.println("Additional details required for the restaurant " + item + ". Please provide:");
-                    System.out.print("Description: ");
-                    String restaurantDescription = scanner.nextLine();
-                    System.out.print("Is Character Dining? (true/false): ");
-                    boolean isCharacterDining = scanner.nextBoolean();
-                    scanner.nextLine(); // Consume newline
-                    System.out.print("opening hours (HH:mm:ss): ");
-                    String openingHours = scanner.nextLine();
-                    System.out.print("clossing hours (HH:mm:ss): ");
-                    String closingHours = scanner.nextLine();
-                    System.out.print("Is All You Can Eat? (true/false): ");
-                    boolean isAllYouCanEat = scanner.nextBoolean();
-                    scanner.nextLine(); // Consume newline
-                    System.out.print("Park: ");
-                    String park = scanner.nextLine();
-                    System.out.print("Type of Food: ");
-                    String typeOfFood = scanner.nextLine();
-                    System.out.print("Price Range ($): ");
-                    String priceRange = scanner.nextLine();
-                    // Call InsertNewRestaurantsfull with additional details
-                    insertNewRestaurantFull(connection, item, restaurantDescription, isCharacterDining, openingHours,closingHours, isAllYouCanEat, park, typeOfFood, priceRange);
-                } else {
-                    System.out.println("Restaurant " + item + " inserted successfully.");
-                }
+ public static void addItemstoInventory(List<String> itemsToAdd, String username, String password, Scanner scanner) {
+    try (Connection connection = DriverManager.getConnection(DataMGR.DB_URL, username, password)) {
+        for (String item : itemsToAdd) {
+            CallableStatement statement = connection.prepareCall("{CALL InsertNewRestaurants(?, ?)}");
+            statement.setString(1, item);
+            statement.registerOutParameter(2, java.sql.Types.BOOLEAN);
+            statement.execute();
+            boolean needAdditionalDetails = statement.getBoolean(2);
+            
+            // Manually check if needAdditionalDetails is true (1)
+            if (needAdditionalDetails) {
+                System.out.println("Additional details required for the restaurant " + item + ". Please provide:");
+                System.out.print("Description: ");
+                String restaurantDescription = scanner.nextLine();
+                System.out.print("Is Character Dining? (true/false): ");
+                boolean isCharacterDining = scanner.nextBoolean();
+                scanner.nextLine(); // Consume newline
+                System.out.print("Opening hours (HH:mm:ss): ");
+                String openingHours = scanner.nextLine();
+                System.out.print("Closing hours (HH:mm:ss): ");
+                String closingHours = scanner.nextLine();
+                System.out.print("Is All You Can Eat? (true/false): ");
+                boolean isAllYouCanEat = scanner.nextBoolean();
+                scanner.nextLine(); // Consume newline
+                System.out.print("Park: ");
+                String park = scanner.nextLine();
+                System.out.print("Type of Food: ");
+                String typeOfFood = scanner.nextLine();
+                System.out.print("Price Range ($): ");
+                String priceRange = scanner.nextLine();
+                
+                // Call InsertNewRestaurantsfull with additional details
+                insertNewRestaurantFull(connection, item, restaurantDescription, isCharacterDining, openingHours, closingHours, isAllYouCanEat, park, typeOfFood, priceRange);
+            } else {
+                System.out.println("Restaurant " + item + " already exists in the inventory.");
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+}
 
     private static void insertNewRestaurantFull(Connection connection, String restaurantName, String description, boolean isCharacterDining, String openhours, String closehours, boolean isAllYouCanEat, String park, String typeOfFood, String priceRange) throws SQLException {
         CallableStatement statement = connection.prepareCall("{CALL InsertNewRestaurantsfull(?, ?, ?,?, ?, ?, ?, ?)}");
