@@ -44,8 +44,8 @@ public class Dal {
 
 
 
-    public static void addItemstoInventory(String dbName, List<String> itemsToAdd, String username, String password, Scanner scanner) {
-        try (Connection connection = DriverManager.getConnection(DataMGR.DB_URL + dbName, username, password)) {
+    public static void addItemstoInventory( List<String> itemsToAdd, String username, String password, Scanner scanner) {
+        try (Connection connection = DriverManager.getConnection(DataMGR.DB_URL , username, password)) {
             for (String item : itemsToAdd) {
                 CallableStatement statement = connection.prepareCall("{CALL InsertNewRestaurants(?, ?)}");
                 statement.setString(1, item);
@@ -239,7 +239,27 @@ public class Dal {
        }
         
    }
-}    
+
+   public static List<String> getAllRestaurantNames() {
+    List<String> restaurantNames = new ArrayList<>();
+    String sql = "SELECT restaurantName FROM restaurants";
+
+    try (Connection connection = DriverManager.getConnection(DataMGR.DB_URL, DataMGR.username, DataMGR.password);
+         PreparedStatement pstmt = connection.prepareStatement(sql);
+         ResultSet rs = pstmt.executeQuery()) {
+
+        while (rs.next()) {
+            // Retrieve the restaurant name from the result set
+            String name = rs.getString("restaurantName");
+            restaurantNames.add(name);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return restaurantNames;
+}
+}
     
 
 

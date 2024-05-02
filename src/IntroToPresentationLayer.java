@@ -2,13 +2,18 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Timer;
 
 import javax.swing.JFileChooser;
+import javax.swing.JSpinner.DateEditor;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class IntroToPresentationLayer {
@@ -129,7 +134,7 @@ private static void addRestaurantToDatabase() {
         if (!restaurantsToAdd.isEmpty()) {
             // Push all the restaurants to the database
             for (String restaurant : restaurantsToAdd) {
-                Dal.addItemstoInventory(dbName, Collections.singletonList(restaurant), DataMGR.getUsername(), DataMGR.getPassword(), null);
+                Dal.addItemstoInventory( Collections.singletonList(restaurant), DataMGR.getUsername(), DataMGR.getPassword(), null);
             }
             System.out.println("Restaurants successfully added to the database.");
             Dal.addFavorite(restaurantsToAdd); // Allow user to add favorites
@@ -172,7 +177,7 @@ private static void addRestaurantToDatabase() {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             // Write the favorites to the file
-            for (String favorite : favoritesList) {
+            for (String favorite : favoritesList ){
                 writer.write(favorite);
                 writer.newLine();
             }
@@ -180,8 +185,7 @@ private static void addRestaurantToDatabase() {
         } catch (IOException e) {
             System.err.println("Error exporting favorites: " + e.getMessage());
         }
-    }
-        private static void viewFavorites() {
+    }        private static void viewFavorites() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Your current favorites:"+favoritesList);
     
@@ -194,13 +198,23 @@ private static void addRestaurantToDatabase() {
         scanner.nextLine(); // Consume newline
     
         switch (choice) {
+           
             case 1:
-                // Add a new favorite
-                System.out.println("Enter the name of the restaurant you want to add to favorites:");
-                String newFavorite = scanner.nextLine();
-                favoritesList.add(newFavorite);
-                System.out.println(newFavorite + " added to favorites.");
-                break;
+            // Show all restaurant options
+            System.out.println("Available restaurant options:");
+            // Call a method in Dal class to retrieve and display all restaurant options
+            List<String> restaurantNames = Dal.getAllRestaurantNames();
+            System.out.println ("current restaurants in the database are:" +restaurantNames);
+            
+            // Add a new favorite
+            
+            Dal.addFavorite(restaurantNames);
+            
+            
+            IntroToPresentationLayer.choices();
+            break;
+        
+        
             case 2:
                 // Remove an existing favorite
                 System.out.println("Enter the number of the favorite you want to remove:");
@@ -211,10 +225,12 @@ private static void addRestaurantToDatabase() {
                     System.out.println(removedFavorite + " removed from favorites.");
                 } else {
                     System.out.println("Invalid favorite number.");
+                    IntroToPresentationLayer.choices();
                 }
-                break;
+                IntroToPresentationLayer.choices();
             default:
                 System.out.println("Invalid choice.");
+                IntroToPresentationLayer.choices();
         }
         scanner.close();
     }
