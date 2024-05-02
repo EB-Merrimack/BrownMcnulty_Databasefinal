@@ -31,7 +31,10 @@ public class favoritesList {
         saveFavoritesToFile(username);
     }
 
-
+    // Get the list of favorite restaurants
+    public static List<String> getFavorites() {
+        return new ArrayList<>(favorites);
+    }
     
 
     // Save favorites to a file
