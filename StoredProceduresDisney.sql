@@ -42,12 +42,14 @@ DELIMITER ;
 
 
 DELIMITER //
-drop procedure if exists FindRestaurantsByParkName;
+
+DROP PROCEDURE IF EXISTS FindRestaurantsByParkName;
+
 CREATE PROCEDURE FindRestaurantsByParkName(IN parkName VARCHAR(200))
 BEGIN
-    SELECT r.restaurantName 
-    FROM Restaurants r
-    WHERE r.park = parkName;
+    SELECT restaurantName 
+    FROM Restaurants 
+    WHERE park = parkName;
 END//
 
 DELIMITER ;
@@ -59,7 +61,7 @@ CREATE PROCEDURE FindRestaurantsByServiceType(IN serviceType VARCHAR(50))
 BEGIN
     IF serviceType = 'Quick Service' THEN
         SELECT r.restaurantName 
-        FROM Restaurants r
+        FROM findyourdisneyrestaurant.restaurants r
         INNER JOIN QuickService qs ON r.restaurantName = qs.restaurantName;
     ELSE
         SELECT r.restaurantName 

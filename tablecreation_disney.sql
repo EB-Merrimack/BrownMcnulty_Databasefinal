@@ -1,5 +1,6 @@
 
-
+drop database if exists FindYourDisneyRestaurant;
+create database FindYourDisneyRestaurant;
 USE FindYourDisneyRestaurant;
 
 CREATE TABLE IF NOT EXISTS Parks (
