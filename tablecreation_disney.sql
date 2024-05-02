@@ -1,5 +1,5 @@
-DROP DATABASE IF EXISTS FindYourDisneyRestaurant;
-CREATE DATABASE FindYourDisneyRestaurant;
+
+
 USE FindYourDisneyRestaurant;
 
 CREATE TABLE IF NOT EXISTS Parks (
@@ -26,11 +26,10 @@ restaurantName Varchar(200),
 foreign key (restaurantName) references restaurants(restaurantName) on update cascade on delete cascade
 );
 
-create table if not exists NeedsReservations(
+create table if not exists needs_reservations(
 restaurantName  VARCHAR(200) PRIMARY KEY,
-HowHardisItToGet1to10 integer,
-foreign key (restaurantName) references restaurants(restaurantName) on update cascade on delete cascade 
-);
+ HowHardisItToGet1to10 INTEGER,
+foreign key (restaurantName) references restaurants(restaurantName) on update cascade on delete cascade );
 
 create table if not exists QuickService(
 restaurantName  VARCHAR(200) PRIMARY KEY,

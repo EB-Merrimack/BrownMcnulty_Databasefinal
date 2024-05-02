@@ -141,7 +141,7 @@ private static void addRestaurantToDatabase() {
             String parksearch = scanner.nextLine();
 
             // Perform the search with the provided filters
-            List<String> searchResult = dal.searchInventory(dbName, parksearch, DataMGR.getUsername(), DataMGR.getPassword());
+            List<String> searchResult = dal.searchRestaurantsByPark(parksearch);
 
             // Display search result
             if (searchResult.isEmpty()) {

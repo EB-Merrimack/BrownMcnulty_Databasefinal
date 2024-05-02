@@ -20,7 +20,7 @@ BEGIN
         SET need_additional_details := FALSE;
     END IF;
 END //
-
+drop procedure if exists InsertNewRestaurantsfull;
 CREATE PROCEDURE InsertNewRestaurantsfull(
     IN restaurantName VARCHAR(200),
     IN restaurantDescription VARCHAR(200), 
@@ -42,19 +42,19 @@ DELIMITER ;
 
 
 DELIMITER //
-
+drop procedure if exists FindRestaurantsByParkName;
 CREATE PROCEDURE FindRestaurantsByParkName(IN parkName VARCHAR(200))
 BEGIN
-    SELECT restaurantName 
-    FROM Restaurants 
-    WHERE park = parkName;
+    SELECT r.restaurantName 
+    FROM Restaurants r
+    WHERE r.park = parkName;
 END//
 
 DELIMITER ;
 
 
 DELIMITER //
-
+drop procedure if exists FindRestaurantsByServiceType;
 CREATE PROCEDURE FindRestaurantsByServiceType(IN serviceType VARCHAR(50))
 BEGIN
     IF serviceType = 'Quick Service' THEN

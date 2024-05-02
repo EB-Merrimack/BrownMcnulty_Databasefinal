@@ -172,9 +172,9 @@ public class Dal {
     }
 
 
-    public List<String> searchRestaurantsByPark(String dbName, String username, String password, String parkName) {
+    public List<String> searchRestaurantsByPark(String parkName) {
         List<String> restaurants = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection(DataMGR.DB_URL + dbName, username, password)) {
+        try (Connection connection = DriverManager.getConnection(DataMGR.DB_URL, DataMGR.username, DataMGR.password)) {
             CallableStatement statement = connection.prepareCall("{CALL FindRestaurantsByParkName(?)}");
             statement.setString(1, parkName);
             ResultSet resultSet = statement.executeQuery();
@@ -185,12 +185,18 @@ public class Dal {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        System.out.println("Here are the restaurants in " + parkName + ": " + restaurants);
+        // Pause before going back to the menu
+        System.out.println("Press Enter to continue...");
+        Scanner scanner = new Scanner(System.in);
+        scanner.nextLine(); 
+        IntroToPresentationLayer.choices();
         return restaurants;
     }
 
-    public List<String> findRestaurantsByServiceType(String dbName, String username, String password, String serviceType) {
+    public List<String> findRestaurantsByServiceType( String username, String password, String serviceType) {
         List<String> restaurants = new ArrayList<>();
-        try (Connection connection = DriverManager.getConnection(DataMGR.DB_URL + dbName, username, password)) {
+        try (Connection connection = DriverManager.getConnection(DataMGR.DB_URL, username, password)) {
             String procedureCall = "{CALL FindRestaurantsByServiceType(?)}";
             try (CallableStatement statement = connection.prepareCall(procedureCall)) {
                 statement.setString(1, serviceType);
