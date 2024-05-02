@@ -163,32 +163,22 @@ private static void addRestaurantToDatabase() {
     }
 
     private static void exportFavorites() {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Save Favorites");
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Text files", "txt");
-        fileChooser.setFileFilter(filter);
-    
-        int userSelection = fileChooser.showSaveDialog(null);
-        if (userSelection == JFileChooser.APPROVE_OPTION) {
-            File fileToSave = fileChooser.getSelectedFile();
-            if (!fileToSave.getName().endsWith(".txt")) {
-                fileToSave = new File(fileToSave.getAbsolutePath() + ".txt");
-            }
-    
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileToSave))) {
-                // Get the list of favorites from the favoritesList class
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the file name to save the favorites (without extension): ");
+        String fileName = scanner.nextLine();
 
-                for (String favorite : favoritesList) {
-                    writer.write(favorite);
-                    writer.newLine();
-                }
-    
-                System.out.println("Favorites exported successfully.");
-            } catch (IOException e) {
-                System.err.println("Error exporting favorites: " + e.getMessage());
+        // Construct the file path in the current directory
+        String filePath = fileName + ".txt";
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            // Write the favorites to the file
+            for (String favorite : favoritesList) {
+                writer.write(favorite);
+                writer.newLine();
             }
-        } else {
-            System.out.println("Export canceled.");
+            System.out.println("Favorites exported successfully.");
+        } catch (IOException e) {
+            System.err.println("Error exporting favorites: " + e.getMessage());
         }
     }
         private static void viewFavorites() {
