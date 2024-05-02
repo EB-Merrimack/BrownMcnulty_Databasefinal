@@ -1,8 +1,15 @@
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
+
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class IntroToPresentationLayer {
     private static String dbName = "FindYourDisneyRestaurant";
@@ -156,11 +163,35 @@ private static void addRestaurantToDatabase() {
     }
 
     private static void exportFavorites() {
-        // Export favorites
-        System.out.println("Functionality to export favorites is not implemented yet.");
-    }
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Save Favorites");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Text files", "txt");
+        fileChooser.setFileFilter(filter);
+    
+        int userSelection = fileChooser.showSaveDialog(null);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            File fileToSave = fileChooser.getSelectedFile();
+            if (!fileToSave.getName().endsWith(".txt")) {
+                fileToSave = new File(fileToSave.getAbsolutePath() + ".txt");
+            }
+    
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileToSave))) {
+                // Get the list of favorites from the favoritesList class
 
-    private static void viewFavorites() {
+                for (String favorite : favoritesList) {
+                    writer.write(favorite);
+                    writer.newLine();
+                }
+    
+                System.out.println("Favorites exported successfully.");
+            } catch (IOException e) {
+                System.err.println("Error exporting favorites: " + e.getMessage());
+            }
+        } else {
+            System.out.println("Export canceled.");
+        }
+    }
+        private static void viewFavorites() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Your current favorites:"+favoritesList);
     
