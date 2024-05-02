@@ -28,7 +28,7 @@ public static void main(String[] args) {
             System.out.println("2- Search by park");
             System.out.println("3- Search by service type");
             System.out.println("4- Export favorites");
-            System.out.println("5- Change favorites");
+            System.out.println("5- view favorites");
             System.out.println("6- Close database connections");
             System.out.println("7- Search restaurant details");
             System.out.println("8- Exit");
@@ -61,7 +61,7 @@ public static void main(String[] args) {
 
                 case 5:
                     // Change favorites
-                    changeFavorites();
+                    viewFavorites();
                     break;
 
                 case 6:
@@ -142,17 +142,6 @@ private static void addRestaurantToDatabase() {
 
             // Perform the search with the provided filters
             List<String> searchResult = dal.searchRestaurantsByPark(parksearch);
-
-            // Display search result
-            if (searchResult.isEmpty()) {
-                System.out.println("No restaurants found matching the search criteria.");
-            } else {
-                System.out.println("Search Result:");
-                for (String item : searchResult) {
-                    System.out.println(item); // Assuming Item class has overridden toString() method
-                }
-                Dal.addFavorite(searchResult); // Allow user to add favorites
-            }
         }
     }
 
@@ -163,17 +152,7 @@ private static void addRestaurantToDatabase() {
             String searchServiceType = scanner.nextLine();
             Dal dal = new Dal();
             List<String> searchResult = dal.findRestaurantsByServiceType(DataMGR.getUsername(), DataMGR.getPassword(), searchServiceType);
-
-            if (searchResult.isEmpty()) {
-                System.out.println("No restaurants found matching the service type.");
-            } else {
-                System.out.println("Search Result:");
-                for (String item : searchResult) {
-                    System.out.println(item); // Assuming Item class has overridden toString() method
-                }
-                ((Dal) favoritesList).addFavorite(searchResult); // Allow user to add favorites
             }
-        }
     }
 
     private static void exportFavorites() {
@@ -181,9 +160,9 @@ private static void addRestaurantToDatabase() {
         System.out.println("Functionality to export favorites is not implemented yet.");
     }
 
-    private static void changeFavorites() {
+    private static void viewFavorites() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Your current favorites:");
+        System.out.println("Your current favorites:"+favoritesList);
     
         for (int i = 0; i < favoritesList.size(); i++) {
             System.out.println((i + 1) + ". " + favoritesList.get(i));

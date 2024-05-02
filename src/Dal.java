@@ -42,10 +42,7 @@ public class Dal {
         return null;
  }
 
-	public List<String> Servicesearch(String dbName, String username, String password, String searchServiceType) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'Servicesearch'");
-	}
+
 
     public static void addItemstoInventory(String dbName, List<String> itemsToAdd, String username, String password, Scanner scanner) {
         try (Connection connection = DriverManager.getConnection(DataMGR.DB_URL + dbName, username, password)) {
