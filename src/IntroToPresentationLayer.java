@@ -129,7 +129,7 @@ private static void addRestaurantToDatabase() {
         if (!restaurantsToAdd.isEmpty()) {
             // Push all the restaurants to the database
             for (String restaurant : restaurantsToAdd) {
-                Dal.addItemstoInventory(dbName, Collections.singletonList(restaurant), DataMGR.getUsername(), DataMGR.getPassword(), null);
+                Dal.addRestaurantDetails(dbName, Collections.singletonList(restaurant), DataMGR.getUsername(), DataMGR.getPassword(), null);
             }
             System.out.println("Restaurants successfully added to the database.");
             Dal.addFavorite(restaurantsToAdd); // Allow user to add favorites

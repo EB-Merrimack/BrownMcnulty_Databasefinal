@@ -44,7 +44,7 @@ public class Dal {
 
 
 
-    public static void addItemstoInventory(String dbName, List<String> itemsToAdd, String username, String password, Scanner scanner) {
+    public static void addRestaurantDetails(String dbName, List<String> itemsToAdd, String username, String password, Scanner scanner) {
         try (Connection connection = DriverManager.getConnection(DataMGR.DB_URL + dbName, username, password)) {
             for (String item : itemsToAdd) {
                 CallableStatement statement = connection.prepareCall("{CALL InsertNewRestaurants(?, ?)}");
