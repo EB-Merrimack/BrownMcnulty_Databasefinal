@@ -226,7 +226,7 @@ public class Dal {
                for (String name : names) {
                    String restaurant = name.trim();
                    if (items.contains(restaurant)) {
-                       favoritesList.addFavorite(restaurant);
+                       favoritesList.addFavorite(restaurant,DataMGR.username);
                        System.out.println(restaurant + " added to favorites.");
                    } else {
                        System.out.println("Restaurant '" + restaurant + "' not found.");
