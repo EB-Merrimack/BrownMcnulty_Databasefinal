@@ -47,42 +47,93 @@ public class Dal {
  public static void addRestaurantDetails(List<String> itemsToAdd, String username, String password, Scanner scanner) {
     try (Connection connection = DriverManager.getConnection(DataMGR.DB_URL, username, password)) {
         for (String item : itemsToAdd) {
-            CallableStatement statement = connection.prepareCall("{CALL InsertNewRestaurants(?, ?)}");
-            statement.setString(1, item);
-            statement.registerOutParameter(2, java.sql.Types.BOOLEAN);
-            statement.execute();
-            boolean needAdditionalDetails = statement.getBoolean(2);
-        
-            // Manually check if needAdditionalDetails is true (1)
-            if (needAdditionalDetails) {
+            // Check if the restaurant already exists
+            boolean restaurantExists = checkRestaurantExists(connection, item);
+            if (restaurantExists) {
+                System.out.println("Restaurant " + item + " already exists in the database.");
+                // If the restaurant exists, retrieve its details
+                retrieveRestaurantDetails(connection, item);
+            } else {
+                Scanner input = new Scanner(System.in); // Create a new scanner
+                // If the restaurant doesn't exist, prompt for additional details
                 System.out.println("Additional details required for the restaurant " + item + ". Please provide:");
                 System.out.print("Description: ");
-                String restaurantDescription = scanner.nextLine();
+                String restaurantDescription = input.nextLine();
                 System.out.print("Is Character Dining? (true/false): ");
-                boolean isCharacterDining = scanner.nextBoolean();
-                scanner.nextLine(); // Consume newline
+                boolean isCharacterDining = input.nextBoolean();
                 System.out.print("Opening hours (HH:mm:ss): ");
-                String openingHours = scanner.nextLine();
+                String openingHours = input.nextLine();
+                input.nextLine(); // Consume newline
                 System.out.print("Closing hours (HH:mm:ss): ");
-                String closingHours = scanner.nextLine();
+                String closingHours = input.nextLine();
                 System.out.print("Is All You Can Eat? (true/false): ");
-                boolean isAllYouCanEat = scanner.nextBoolean();
-                scanner.nextLine(); // Consume newline
+                boolean isAllYouCanEat = input.nextBoolean();
+                input.nextLine(); // Consume newline
                 System.out.print("Park: ");
-                String park = scanner.nextLine();
+                String park = input.nextLine();
                 System.out.print("Type of Food: ");
-                String typeOfFood = scanner.nextLine();
+                String typeOfFood = input.nextLine();
                 System.out.print("Price Range ($): ");
-                String priceRange = scanner.nextLine();
+                String priceRange = input.nextLine();
                 
-                // Call InsertNewRestaurantsfull with additional details
+                // Insert the new restaurant with additional details
                 insertNewRestaurantFull(connection, item, restaurantDescription, isCharacterDining, openingHours, closingHours, isAllYouCanEat, park, typeOfFood, priceRange);
-            } else {
-                System.out.println("Restaurant " + item + " already exists in the inventory.");
             }
         }
     } catch (SQLException e) {
         e.printStackTrace();
+
+    }
+}
+
+private static boolean checkRestaurantExists(Connection connection, String restaurantName) throws SQLException {
+    String sql = "SELECT COUNT(*) AS count FROM restaurants WHERE restaurantName = ?";
+    try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        pstmt.setString(1, restaurantName);
+        try (ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                int count = rs.getInt("count");
+                return count > 0;
+            }
+        }
+    }
+    return false;
+}
+
+private static void retrieveRestaurantDetails(Connection connection, String restaurantName) throws SQLException {
+    String sql = "SELECT * FROM restaurants WHERE restaurantName = ?";
+    try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        pstmt.setString(1, restaurantName);
+        try (ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                // Retrieve restaurant details
+                String name = rs.getString("restaurantName");
+                String description = rs.getString("description");
+                boolean isCharacterDining = rs.getBoolean("isCharacterDining");
+                String openingHours = rs.getString("openingHours");
+                String closingHours = rs.getString("closingHours");
+                String priceRange = rs.getString("priceRange");
+                boolean isAllYouCanEat = rs.getBoolean("isAllYouCanEat");
+                String park = rs.getString("park");
+                String typeOfFood = rs.getString("typeOfFood");
+                
+                // Construct the details into a string
+                StringBuilder result = new StringBuilder();
+                result.append("Restaurant Name: ").append(name).append("\n");
+                result.append("Description: ").append(description).append("\n");
+                result.append("Character Dining: ").append(isCharacterDining).append("\n");
+                // Append other restaurant details
+                result.append("Opening Hours: ").append(openingHours).append("\n");
+                result.append("Closing Hours: ").append(closingHours).append("\n");
+                result.append("Price Range: ").append(priceRange).append("\n");
+                result.append("All You Can Eat: ").append(isAllYouCanEat).append("\n");
+                result.append("Park: ").append(park).append("\n");
+                result.append("Type of Food: ").append(typeOfFood).append("\n");
+
+                // Print the details
+                System.out.println(result.toString());
+            }
+        }
     }
 }
 
@@ -150,12 +201,14 @@ public class Dal {
                             
                             // Print out the restaurant details as they are retrieved
                             System.out.println(result);
+                            IntroToPresentationLayer.choices();
                         }
                     }
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            IntroToPresentationLayer.choices();
         }
 
 
@@ -238,6 +291,7 @@ public class Dal {
            IntroToPresentationLayer.choices();
        } catch (Exception e) {
            e.printStackTrace();
+           IntroToPresentationLayer.choices();
        }
         
    }
@@ -257,6 +311,7 @@ public class Dal {
         }
     } catch (SQLException e) {
         e.printStackTrace();
+        IntroToPresentationLayer.choices();
     }
 
     return restaurantNames;
