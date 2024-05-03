@@ -46,19 +46,19 @@ public class Dal {
 
  public static void addRestaurantDetails(List<String> itemsToAdd, String username, String password, Scanner scanner) {
     try (Connection connection = DriverManager.getConnection(DataMGR.DB_URL, username, password)) {
-        for (String item : itemsToAdd) {
+        for (String restaurant_name : itemsToAdd) {
             // Check if the restaurant already exists
-            boolean restaurantExists = checkRestaurantExists(connection, item);
+            boolean restaurantExists = checkRestaurantExists(connection, restaurant_name);
             if (restaurantExists) {
-                System.out.println("Restaurant " + item + " already exists in the database.");
+                System.out.println("Restaurant " + restaurant_name + " already exists in the database.");
                 // If the restaurant exists, retrieve its details
-                retrieveRestaurantDetails(connection, item);
+                retrieveRestaurantDetails(connection, restaurant_name);
             } else {
                 Scanner input = new Scanner(System.in); // Create a new scanner
                 // If the restaurant doesn't exist, prompt for additional details
-                System.out.println("Additional details required for the restaurant " + item + ". Please provide:");
+                System.out.println("Additional details required for the restaurant " + restaurant_name + ". Please provide:");
                 System.out.print("Description: ");
-                String restaurantDescription = input.nextLine();
+                String Description = input.nextLine();
                 System.out.print("Is Character Dining? (true/false): ");
                 boolean isCharacterDining = input.nextBoolean();
                 System.out.print("Opening hours (HH:mm:ss): ");
@@ -77,7 +77,7 @@ public class Dal {
                 String priceRange = input.nextLine();
                 
                 // Insert the new restaurant with additional details
-                insertNewRestaurantFull(connection, item, restaurantDescription, isCharacterDining, openingHours, closingHours, isAllYouCanEat, park, typeOfFood, priceRange);
+                insertNewRestaurantFull(connection, restaurant_name, Description, isCharacterDining, openingHours, closingHours, isAllYouCanEat, park, typeOfFood, priceRange);
             }
         }
     } catch (SQLException e) {
@@ -138,7 +138,7 @@ private static void retrieveRestaurantDetails(Connection connection, String rest
 }
 
     private static void insertNewRestaurantFull(Connection connection, String restaurantName, String description, boolean isCharacterDining, String openhours, String closehours, boolean isAllYouCanEat, String park, String typeOfFood, String priceRange) throws SQLException {
-        CallableStatement statement = connection.prepareCall("{CALL InsertNewRestaurantsfull(?, ?, ?,?, ?, ?, ?, ?)}");
+        CallableStatement statement = connection.prepareCall("{CALL InsertNewRestaurantsfull(?, ?, ?,?, ?, ?, ?, ?,?)}");
         statement.setString(1, restaurantName);
         statement.setString(2, description);
         statement.setBoolean(3, isCharacterDining);
@@ -147,6 +147,7 @@ private static void retrieveRestaurantDetails(Connection connection, String rest
         statement.setBoolean(6, isAllYouCanEat);
         statement.setString(7, park);
         statement.setString(8, typeOfFood);
+        statement.setString(9, priceRange);
         statement.execute();
         System.out.println("Restaurant " + restaurantName + " inserted successfully with additional details.");
     }
