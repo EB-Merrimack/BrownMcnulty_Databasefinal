@@ -8,7 +8,9 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -172,26 +174,45 @@ private static void addRestaurantToDatabase() {
             List<String> searchResult = dal.findRestaurantsByServiceType(DataMGR.getUsername(), DataMGR.getPassword(), searchServiceType);
             }
     }
-
     private static void exportFavorites() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter the file name to save the favorites (without extension): ");
-        String fileName = scanner.nextLine();
+        try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.print("Enter the file name to save the favorites (without extension): ");
+            String fileName = scanner.nextLine();
 
-        // Construct the file path in the current directory
-        String filePath = fileName + ".txt";
+            // Construct the file path in the current directory
+            String filePath = fileName + ".txt";
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            // Write the favorites to the file
-            for (String favorite : favoritesList ){
-                writer.write(favorite);
-                writer.newLine();
+            // Read favorites from file
+            List<String> readfavoritesList = new ArrayList<>();
+            try (BufferedReader reader = new BufferedReader(new FileReader("userdata\\" + DataMGR.getUsername() + "\\favorites.txt"))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    readfavoritesList.add(line);
+                }
+            } catch (IOException e) {
+                System.err.println("Error reading favorites: " + e.getMessage());
+                return; // Exit method if there's an error
             }
-            System.out.println("Favorites exported successfully.");
+
+            // Establish a connection to the database
+            try (Connection connection = DriverManager.getConnection(DataMGR.DB_URL, DataMGR.username, DataMGR.password)) {
+                // Write details of each favorite restaurant to the file
+                try (FileWriter writer = new FileWriter(filePath)) {
+                    for (String favoriteName : readfavoritesList) {
+                        String details = Dal.retrieveRestaurantDetails(connection, favoriteName);
+                        writer.write(details);
+                        writer.write("\n\n"); // Add some space between restaurant details
+                    }
+                }
+                System.out.println("Favorites exported successfully.");
+            } catch (SQLException e) {
+                System.err.println("SQL Error: " + e.getMessage());
+            }
         } catch (IOException e) {
             System.err.println("Error exporting favorites: " + e.getMessage());
         }
-    }   
+    }
     private static void viewFavoritesdashboard() {
         Scanner scanner = new Scanner(System.in);
     

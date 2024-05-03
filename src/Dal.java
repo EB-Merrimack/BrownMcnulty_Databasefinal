@@ -89,6 +89,7 @@ public class Dal {
         }
     } catch (SQLException e) {
         e.printStackTrace();
+        IntroToPresentationLayer.choices();
 
     }
 }
@@ -107,7 +108,7 @@ private static boolean checkRestaurantExists(Connection connection, String resta
     return false;
 }
 
-private static void retrieveRestaurantDetails(Connection connection, String restaurantName) throws SQLException {
+static String retrieveRestaurantDetails(Connection connection, String restaurantName) throws SQLException {
     String sql = "SELECT * FROM restaurants WHERE restaurantName = ?";
     try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
         pstmt.setString(1, restaurantName);
@@ -142,6 +143,7 @@ private static void retrieveRestaurantDetails(Connection connection, String rest
             }
         }
     }
+    return restaurantName;
 }
 
     private static void insertNewRestaurantFull(Connection connection, String restaurantName, String description, boolean isCharacterDining, String openhours, String closehours, boolean isAllYouCanEat, String park, String typeOfFood, String priceRange) throws SQLException {
@@ -244,6 +246,7 @@ private static void retrieveRestaurantDetails(Connection connection, String rest
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            IntroToPresentationLayer.choices();
         }
         System.out.println("Here are the restaurants in " + parkName + ": " + restaurants);
         // Pause before going back to the menu
@@ -269,6 +272,7 @@ private static void retrieveRestaurantDetails(Connection connection, String rest
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            IntroToPresentationLayer.choices();
         }
         System.out.println("Here are the restaurants in " + serviceType + ": " + restaurants);
         System.out.println("Press Enter to continue...");
