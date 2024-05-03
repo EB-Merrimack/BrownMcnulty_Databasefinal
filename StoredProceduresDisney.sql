@@ -67,7 +67,7 @@ BEGIN
     ELSE
         SELECT r.restaurantName 
         FROM Restaurants r
-        INNER JOIN NeedsReservations nr ON r.restaurantName = nr.restaurantName;
+        INNER JOIN needs_reservations nr ON r.restaurantName = nr.restaurantName;
     END IF;
 END//
 

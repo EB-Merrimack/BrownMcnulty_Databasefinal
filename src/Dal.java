@@ -1,5 +1,12 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -271,31 +278,60 @@ private static void retrieveRestaurantDetails(Connection connection, String rest
         return restaurants;
     }
 
-    static void addFavorite(List<String> items) {
-        try (Scanner scanner = new Scanner(System.in)) {
-           System.out.print("Do you want to add any of these restaurants to your favorites? (yes/no): ");
-           String response = scanner.nextLine();
-           if (response.equalsIgnoreCase("yes")) {
-               System.out.println("Enter the names of restaurants you want to add (comma-separated): ");
-               String namesString = scanner.nextLine();
-               String[] names = namesString.split(",");
-               for (String name : names) {
-                   String restaurant = name.trim();
-                   if (items.contains(restaurant)) {
-                       favoritesList.addFavorite(restaurant,DataMGR.username);
-                       System.out.println(restaurant + " added to favorites.");
-                   } else {
-                       System.out.println("Restaurant '" + restaurant + "' not found.");
-                   }
-               }
-           }
-           IntroToPresentationLayer.choices();
-       } catch (Exception e) {
-           e.printStackTrace();
-           IntroToPresentationLayer.choices();
-       }
-        
-   }
+static void addFavorite(List<String> items) {
+    try (Scanner scanner = new Scanner(System.in)) {
+        System.out.print("Do you want to add any of these restaurants to your favorites? (yes/no): ");
+        String response = scanner.nextLine();
+        if (response.equalsIgnoreCase("yes")) {
+            System.out.println("Enter the names of restaurants you want to add (comma-separated): ");
+            String namesString = scanner.nextLine();
+            String[] names = namesString.split(",");
+            List<String> newFavorites = new ArrayList<>();
+
+            // Check if favorites file exists, if not, create an empty one
+            Path favoritesFile = Paths.get("userdata", DataMGR.username, "favorites.txt");
+            if (!Files.exists(favoritesFile)) {
+                Files.createDirectories(favoritesFile.getParent());
+                Files.createFile(favoritesFile);
+            } else {
+                // Read existing favorites
+                try (BufferedReader reader = Files.newBufferedReader(favoritesFile)) {
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        newFavorites.add(line);
+                    }
+                }
+            }
+
+            // Add new favorites
+            for (String name : names) {
+                String restaurant = name.trim();
+                if (items.contains(restaurant) && !newFavorites.contains(restaurant)) {
+                    newFavorites.add(restaurant);
+                    System.out.println(restaurant + " added to favorites.");
+                } else if (!items.contains(restaurant)) {
+                    System.out.println("Restaurant '" + restaurant + "' not found.");
+                } else {
+                    System.out.println("Restaurant '" + restaurant + "' is already in favorites.");
+                }
+            }
+
+            // Write new favorites to file
+            try (BufferedWriter writer = Files.newBufferedWriter(favoritesFile)) {
+                for (String favorite : newFavorites) {
+                    writer.write(favorite);
+                    writer.newLine();
+                }
+            }
+        }
+        IntroToPresentationLayer.choices();
+    } catch (Exception e) {
+        e.printStackTrace();
+        IntroToPresentationLayer.choices();
+    }
+}
+ 
+    
 
    public static List<String> getAllRestaurantNames() {
     List<String> restaurantNames = new ArrayList<>();
@@ -317,6 +353,44 @@ private static void retrieveRestaurantDetails(Connection connection, String rest
 
     return restaurantNames;
 }
+
+public static void removeFavorite(String removedFavorite, String username) {
+    // Load the user's favorites list
+    List<String> favorites = loadFavorites(username);
+
+    // Remove the specified favorite restaurant
+    if (favorites.remove(removedFavorite)) {
+        // If the favorite was removed, save the updated favorites list
+        saveFavorites(favorites, username);
+        System.out.println(removedFavorite + " removed from favorites.");
+    } else {
+        System.out.println("Favorite not found.");
+    }
+}
+
+private static List<String> loadFavorites(String username) {
+    List<String> favorites = new ArrayList<>();
+    try (BufferedReader reader = new BufferedReader(new FileReader("userdata\\" + username + "\\favorites.txt"))) {
+        String line;
+        while ((line = reader.readLine()) != null) {
+            favorites.add(line);
+        }
+    } catch (IOException e) {
+        System.err.println("Error reading favorites: " + e.getMessage());
+    }
+    return favorites;
+}
+
+private static void saveFavorites(List<String> favorites, String username) {
+    try (PrintWriter writer = new PrintWriter(new FileWriter("userdata\\" + username + "\\favorites.txt"))) {
+        for (String favorite : favorites) {
+            writer.println(favorite);
+        }
+    } catch (IOException e) {
+        System.err.println("Error saving favorites: " + e.getMessage());
+    }
+}
+
 }
     
 

@@ -1,7 +1,13 @@
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
@@ -40,7 +46,7 @@ public static void main(String[] args) {
             System.out.println("2- Search by park");
             System.out.println("3- Search by service type");
             System.out.println("4- Export favorites");
-            System.out.println("5- view favorites");
+            System.out.println("5- view favorites Dashboard");
             System.out.println("6- Close database connections");
             System.out.println("7- Search restaurant details");
             System.out.println("8- Exit");
@@ -73,7 +79,7 @@ public static void main(String[] args) {
 
                 case 5:
                     // Change favorites
-                    viewFavorites();
+                    viewFavoritesdashboard();
                     break;
 
                 case 6:
@@ -185,56 +191,84 @@ private static void addRestaurantToDatabase() {
         } catch (IOException e) {
             System.err.println("Error exporting favorites: " + e.getMessage());
         }
-    }        private static void viewFavorites() {
+    }   
+    private static void viewFavoritesdashboard() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Your current favorites:"+favoritesList);
     
-        for (int i = 0; i < favoritesList.size(); i++) {
-            System.out.println((i + 1) + ". " + favoritesList.get(i));
+        List<String> readfavoritesList = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader("userdata\\" + DataMGR.getUsername() + "\\favorites.txt"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                readfavoritesList.add(line);
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading favorites: " + e.getMessage());
         }
     
-        System.out.println("Do you want to (1) add a new favorite or (2) remove an existing favorite? (1/2)");
+        System.out.println("Your current favorites:");
+        for (int i = 0; i < readfavoritesList.size(); i++) {
+            System.out.println((i + 1) + ". " + readfavoritesList.get(i));
+        }
+    
+        System.out.println("Do you want to (1) add a new favorite, (2) remove an existing favorite, or (3) exit? (1/2/3)");
         int choice = scanner.nextInt();
         scanner.nextLine(); // Consume newline
     
         switch (choice) {
-           
             case 1:
-            // Show all restaurant options
-            System.out.println("Available restaurant options:");
-            // Call a method in Dal class to retrieve and display all restaurant options
-            List<String> restaurantNames = Dal.getAllRestaurantNames();
-            System.out.println ("current restaurants in the database are:" +restaurantNames);
-            
-            // Add a new favorite
-            
-            Dal.addFavorite(restaurantNames);
-            
-            
-            IntroToPresentationLayer.choices();
-            break;
-        
-        
+                // Add a new favorite
+                List<String> restaurantNames = Dal.getAllRestaurantNames();
+                System.out.println("the current restaurants in the database are:"+restaurantNames);
+                Dal.addFavorite(restaurantNames); // Add favorites to Dal
+                System.out.println("New favorites added successfully.");
+                saveFavoritesToFile(readfavoritesList, DataMGR.getUsername()); // Save updated favorites to file
+                IntroToPresentationLayer.choices();
+                break;
             case 2:
                 // Remove an existing favorite
                 System.out.println("Enter the number of the favorite you want to remove:");
                 int favoriteIndex = scanner.nextInt();
                 scanner.nextLine(); // Consume newline
-                if (favoriteIndex > 0 && favoriteIndex <= favoritesList.size()) {
-                    String removedFavorite = favoritesList.remove(favoriteIndex - 1);
+                if (favoriteIndex > 0 && favoriteIndex <= readfavoritesList.size()) {
+                    String removedFavorite = readfavoritesList.remove(favoriteIndex - 1);
+                    Dal.removeFavorite(removedFavorite, DataMGR.getUsername()); // Remove favorite from Dal
                     System.out.println(removedFavorite + " removed from favorites.");
+                    saveFavoritesToFile(readfavoritesList, DataMGR.getUsername()); // Save updated favorites to file
                 } else {
                     System.out.println("Invalid favorite number.");
-                    IntroToPresentationLayer.choices();
                 }
                 IntroToPresentationLayer.choices();
+                break;
+            case 3:
+                // Exit
+                IntroToPresentationLayer.choices();
+                break;
             default:
                 System.out.println("Invalid choice.");
                 IntroToPresentationLayer.choices();
+                break;
         }
+    
         scanner.close();
     }
     
+
+    private static void saveFavoritesToFile(List<String> favorites, String username) {
+        try {
+            Path userDir = Paths.get("userdata", username);
+            if (!Files.exists(userDir)) {
+                Files.createDirectories(userDir);
+            }
+            Path filePath = userDir.resolve("favorites.txt");
+            try (PrintWriter writer = new PrintWriter(Files.newBufferedWriter(filePath))) {
+                for (String favorite : favorites) {
+                    writer.println(favorite);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
   
 
