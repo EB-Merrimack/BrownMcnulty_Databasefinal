@@ -108,7 +108,7 @@ private static void retrieveRestaurantDetails(Connection connection, String rest
             if (rs.next()) {
                 // Retrieve restaurant details
                 String name = rs.getString("restaurantName");
-                String description = rs.getString("description");
+                String description = rs.getString("restaurantdescription");
                 boolean isCharacterDining = rs.getBoolean("isCharacterDining");
                 String openingHours = rs.getString("openingHours");
                 String closingHours = rs.getString("closingHours");
