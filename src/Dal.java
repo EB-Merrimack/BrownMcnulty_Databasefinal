@@ -95,8 +95,19 @@ public class Dal {
                 }
                 System.out.print("Type of Food: ");
                 String typeOfFood = input.nextLine();
-                System.out.print("Price Range ($): ");
-                String priceRange = input.nextLine();
+                System.out.print("Price Range ($ to $$$$$): ");
+            String priceRange = input.nextLine();
+        boolean validInput = false;
+
+        // Keep prompting the user until valid input is provided
+        while (!validInput) {
+            // Check if the input contains only 1 to 5 dollar signs
+            if (priceRange.matches("^\\$?\\$?\\$?\\$?\\$?$")) {
+                validInput = true;
+            } else {
+                System.out.println("Invalid input. Please enter 1 to 5 dollar signs.");
+            }
+        }
                 
                 // Insert the new restaurant with additional details
                 insertNewRestaurantFull(connection, restaurant_name, Description, isCharacterDining, openingHours, closingHours, isAllYouCanEat, park, typeOfFood, priceRange);
