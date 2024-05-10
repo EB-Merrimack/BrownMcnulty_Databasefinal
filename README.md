@@ -58,3 +58,6 @@ multiple different options that would actually be useful when planning a trip to
 ### QuickService Table:
 - The restaurant name uniquely determines whether it has seating and the starting price for meals.
 
+## Contributors
+- Emily Brown
+- Erin McNulty
