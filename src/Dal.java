@@ -77,7 +77,22 @@ public class Dal {
                 boolean isAllYouCanEat = input.nextBoolean();
                 input.nextLine(); // Consume newline
                 System.out.print("Park: ");
-                String park = input.nextLine();
+                String userInput = input.nextLine().toLowerCase(); // Convert input to lowercase
+                
+                String park = null;
+                
+                if ("magic kingdom".equalsIgnoreCase(userInput) || "epcot".equalsIgnoreCase(userInput) ||
+                    "animal kingdom".equalsIgnoreCase(userInput) || "hollywood studios".equalsIgnoreCase(userInput)) {
+                    
+                    // Capitalize the first letter of the park name
+                    park = userInput.substring(0, 1).toUpperCase() + userInput.substring(1);
+                    
+                    // Do something if park is one of the main four
+                    System.out.println("You've selected: " + park);
+                } else {
+                    // If park is not one of the main four, set park to null for restaurant
+                    System.out.println("These parks are not the main four official parks.");
+                }
                 System.out.print("Type of Food: ");
                 String typeOfFood = input.nextLine();
                 System.out.print("Price Range ($): ");
