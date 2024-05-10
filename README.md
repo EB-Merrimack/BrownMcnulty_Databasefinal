@@ -12,7 +12,7 @@ To initialize the Disney Restaurant Database, follow these steps:
 ## Welcome to the Disney Restaurant’s Database! 
 Having trouble finding your top Disney restaurant for your next trip? With this database you can search by the four main parks( Magic Kingdom, Animal Kingdom, Hollywood Studios, Epcot) or the service type. After which you have the option of adding any of these results into your exportable favorite list! You also can add that new restaurant you’ve had your eye on!- Even if its not in the database yet through our add restaurant option! Not sure if we have the restaurant you want? Feel free to try adding it, and if it's already there the information of the restaurant will come up. You know you want a classic restaurant but forget some of the details? We've got you covered, too just search restaurant details, and we've got you covered. Just be sure after you’re done to go back into your favorite dashboard and all the restaurants you want to be exported in our easy-to-use favorite export method exporting the name of your go-to restaurants into a neat text file. Once you are done please close out the database connection and remember if you need a reminder on any of the specifics of those restaurants we are here to help! 
 
-## Functional Dependencies User Directions
+## Note For Adding Restaurants
 
 It should be noted that all Disney restaurant names are unique and thus every attribute is assigned to that specific restaurant name. Thus if you are trying to reference generic restaurants like Starbucks or Rainforest Cafe, please be sure to follow the official Disney naming and add “at animal kingdom” or “at disney springs” to the name. 
 
@@ -42,14 +42,19 @@ application, which closes everything. This is designed to be user-friendly and a
 multiple different options that would actually be useful when planning a trip to Disney.
 
 ## Technical Functional Dependencies
-Parks Table:
-The park's name uniquely determines its description.
-Restaurants Table:
-The restaurant name uniquely determines all other attributes about that restaurant.
-MenuItem Table:
-Each menu item is unique and belongs to a specific restaurant.
-needs_reservations Table:
-The restaurant name uniquely determines the difficulty of getting reservations at that restaurant.
-QuickService Table:
-The restaurant name uniquely determines whether it has seating and the starting price for meals.
+
+### Parks Table:
+- The park's name uniquely determines its description.
+
+### Restaurants Table:
+- The restaurant name uniquely determines all other attributes about that restaurant.
+
+### MenuItem Table:
+- Each menu item is unique and belongs to a specific restaurant.
+
+### needs_reservations Table:
+- The restaurant name uniquely determines the difficulty of getting reservations at that restaurant.
+
+### QuickService Table:
+- The restaurant name uniquely determines whether it has seating and the starting price for meals.
 
